@@ -9,6 +9,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pacific.Core", "Pacific.Cor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pacific.UnitTests", "Pacific.UnitTests\Pacific.UnitTests.csproj", "{3432D5CA-9C93-4AFE-BF48-344ED01BA8BB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parky", "Parky\Parky.csproj", "{00B0BDCB-1EEC-40F5-980B-37204B40539F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parky.ConsoleTest", "Parky.ConsoleTest\Parky.ConsoleTest.csproj", "{510A0EFF-FED9-463C-B2CF-E81D29DB21DF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{3432D5CA-9C93-4AFE-BF48-344ED01BA8BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3432D5CA-9C93-4AFE-BF48-344ED01BA8BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3432D5CA-9C93-4AFE-BF48-344ED01BA8BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00B0BDCB-1EEC-40F5-980B-37204B40539F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00B0BDCB-1EEC-40F5-980B-37204B40539F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00B0BDCB-1EEC-40F5-980B-37204B40539F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00B0BDCB-1EEC-40F5-980B-37204B40539F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{510A0EFF-FED9-463C-B2CF-E81D29DB21DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{510A0EFF-FED9-463C-B2CF-E81D29DB21DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{510A0EFF-FED9-463C-B2CF-E81D29DB21DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{510A0EFF-FED9-463C-B2CF-E81D29DB21DF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
