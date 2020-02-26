@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Reflection;
 using Parky.Models;
-using System.Linq;
 using System.Collections.Generic;
+using Parky.Attributes;
+using Parky.Utilities;
 
 namespace Parky
 {
@@ -17,7 +18,67 @@ namespace Parky
 
 		public void AddAssembly(Assembly asm)
 		{
-			throw new NotImplementedException();
+			Type[] types = asm.GetTypes();
+
+			foreach(var type in types)
+			{
+				object attrObj = type.GetCustomAttribute(typeof(ImportConstructorAttribute));
+				
+				// Load refs for ImportConstructor attribute
+				if(attrObj != null)
+				{
+					// Check if reference is already registered, if true then change type of ref to relevant.
+					if(this._refs.TryGetValue(type, out var value))
+					{
+						if(value.IsPropertiesInit && !value.IsConstructorInit)
+						{
+							this._refs[type] = new Ref(type);
+						}
+						else if(!value.IsConstructorInit && !value.IsPropertiesInit)
+						{
+							this._refs[type] = new ConstructorRef(type);
+						}
+					}
+					else
+					{
+						this._refs.Add(type, new ConstructorRef(type));
+					}
+				}
+				else
+				{
+					// Else load refs for export attribute
+					attrObj = type.GetCustomAttribute(typeof(ExportAttribute));
+
+					if(attrObj != null && !this._refs.TryGetValue(type, out var value))
+					{
+						this._refs.Add(type, new ExportRef(type));
+					}
+				}
+				
+				// Load refs for properties and fields
+				var propertiesFieldsRefs = type.GetAllProperties();
+				foreach(var pf in propertiesFieldsRefs)
+				{
+					attrObj = pf.GetCustomAttribute(typeof(ImportAttribute));
+
+					if(attrObj != null && this._refs.TryGetValue(type, out var value))
+					{
+						if(!value.IsPropertiesInit && value.IsConstructorInit)
+						{
+							this._refs[type] = new Ref(type);
+						}
+						else if(!value.IsConstructorInit && !value.IsPropertiesInit)
+						{
+							this._refs[type] = new PropertyRef(type);
+						}
+
+						if(!this._refs.TryGetValue(pf.PropertyType, out var propRef))
+						{
+							this._refs.Add(pf.PropertyType, new ExportRef(pf.PropertyType));
+						}
+					}
+				}
+			}
 		}
 
 		public void AddType(Type type)
@@ -66,7 +127,7 @@ namespace Parky
 
 		private object InitializeObject(Type type)
 		{
-			var instanceRefs = this.GetConstructorRefs(type).ToArray();
+			var instanceRefs = type.GetAllConstructorsRefs();
 			if(instanceRefs.Length == 0)
 			{
 				return this.CreateInst(type, null);
@@ -86,7 +147,7 @@ namespace Parky
 		{
 			obj = obj is null? this.CreateInst(type, null) : obj;
 
-			var propertiesRefs = this.GetProperties(type).ToArray();
+			var propertiesRefs = type.GetRegisteredProperties(this._refs);
 			if(propertiesRefs.Length == 0)
 			{
 				return obj;
@@ -105,18 +166,6 @@ namespace Parky
 			return obj;
 		}
 
-		private IEnumerable<Type> GetConstructorRefs(Type type)
-		{
-			return type.GetConstructors()
-							.SelectMany(c => c.GetParameters())
-							.Select(p => p.ParameterType);
-		}
-
-		private IEnumerable<PropertyInfo> GetProperties(Type type)
-		{
-			return type.GetProperties().Where(p => this._refs.ContainsKey(p.PropertyType));
-		}
-
 		private object CreateInst(Type type, object[] arguments)
 		{
 			object result = null;
@@ -127,7 +176,7 @@ namespace Parky
 			}
 			catch(Exception ex)
 			{
-				throw new Exception($"Cannot create instance of type: {type.FullName}.");
+				throw new Exception($"Cannot create instance of type: {type.FullName}.", ex);
 			}
 
 			return result;

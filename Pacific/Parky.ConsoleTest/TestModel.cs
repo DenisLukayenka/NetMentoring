@@ -1,5 +1,8 @@
+using Parky.Attributes;
+
 namespace Parky.ConsoleTest
 {
+    [ImportConstructor]
     public class TestModel
     {
         public TestModel(SubModel sub) 
@@ -7,6 +10,7 @@ namespace Parky.ConsoleTest
             this.SubModel = sub;
         }
 
+        [Import]
         public PropertyModel PropertyModel { get; set; }
 
         public SubModel SubModel { get; set; }
