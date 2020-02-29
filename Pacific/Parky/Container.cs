@@ -24,67 +24,53 @@ namespace Parky
 
 		public void AddAssembly(Assembly asm)
 		{
-			/*Type[] types = asm.GetTypes();
+			Type[] types = asm.GetTypes();
 
 			foreach(var type in types)
 			{
-				object attrObj = type.GetCustomAttribute(typeof(ImportConstructorAttribute));
-				
+				if(this._refs.ContainsKey(type))
+				{
+					continue;
+				}
+
 				// Load refs for ImportConstructor attribute
+				Attribute attrObj = type.GetCustomAttribute(typeof(ImportConstructorAttribute));
 				if(attrObj != null)
 				{
-					// Check if reference is already registered, if true then change type of ref to relevant.
-					if(this._refs.TryGetValue(type, out var value))
+					this._refs.Add(type, new ConstructorRef(type));
+					continue;
+				}
+
+				// Else load refs for export attribute
+				attrObj = type.GetCustomAttribute(typeof(ExportAttribute));
+				if(attrObj != null)
+				{
+					var exportAttr = attrObj as ExportAttribute;
+
+					if(exportAttr.Contract != null)
 					{
-						if(value.IsPropertiesInit && !value.IsConstructorInit)
-						{
-							this._refs[type] = new Ref(type);
-						}
-						else if(!value.IsConstructorInit && !value.IsPropertiesInit)
-						{
-							this._refs[type] = new ConstructorRef(type);
-						}
+						this._refs.Add(exportAttr.Contract, new ExportRef(type, exportAttr.Contract));
 					}
 					else
 					{
-						this._refs.Add(type, new ConstructorRef(type));
-					}
-				}
-				else
-				{
-					// Else load refs for export attribute
-					attrObj = type.GetCustomAttribute(typeof(ExportAttribute));
-
-					if(attrObj != null && !this._refs.TryGetValue(type, out var value))
-					{
 						this._refs.Add(type, new ExportRef(type));
 					}
+					
+					continue;
 				}
 				
+				
 				// Load refs for properties and fields
-				var propertiesFieldsRefs = type.GetAllProperties();
-				foreach(var pf in propertiesFieldsRefs)
+				PropertyInfo[] properties = type.GetRegisteredProperties(this._refs);
+				FieldInfo[] fields = type.GetRegisteredFields(this._refs);
+
+				if(properties.Length > 0 || fields.Length > 0)
 				{
-					attrObj = pf.GetCustomAttribute(typeof(ImportAttribute));
-
-					if(attrObj != null && this._refs.TryGetValue(type, out var value))
-					{
-						if(!value.IsPropertiesInit && value.IsConstructorInit)
-						{
-							this._refs[type] = new Ref(type);
-						}
-						else if(!value.IsConstructorInit && !value.IsPropertiesInit)
-						{
-							this._refs[type] = new PropertyRef(type);
-						}
-
-						if(!this._refs.TryGetValue(pf.PropertyType, out var propRef))
-						{
-							this._refs.Add(pf.PropertyType, new ExportRef(pf.PropertyType));
-						}
-					}
+					this._refs.Add(type, new ImportRef(type));
+					this.RegisterFields(fields);
+					this.RegisterProperties(properties);
 				}
-			}*/
+			}
 		}
 
 		public void AddType<T>()
@@ -126,6 +112,36 @@ namespace Parky
 			}
 			
 			throw new ApplicationException($"Type: {type.FullName} was not found!");
+		}
+
+		private void RegisterProperties(PropertyInfo[] propertiesRefs)
+		{
+			object attrObj;
+
+			foreach(PropertyInfo pf in propertiesRefs)
+			{
+				attrObj = pf.GetCustomAttribute(typeof(ImportAttribute));
+
+				if(attrObj != null && !this._refs.TryGetValue(pf.PropertyType, out var propRef))
+				{
+					this._refs.Add(pf.PropertyType, new ExportRef(pf.PropertyType));
+				}
+			}
+		}
+
+		private void RegisterFields(FieldInfo[] fieldsRefs)
+		{
+			object attrObj;
+
+			foreach(FieldInfo pf in fieldsRefs)
+			{
+				attrObj = pf.GetCustomAttribute(typeof(ImportAttribute));
+
+				if(attrObj != null && !this._refs.TryGetValue(pf.FieldType, out var propRef))
+				{
+					this._refs.Add(pf.FieldType, new ExportRef(pf.FieldType));
+				}
+			}
 		}
 	}
 }

@@ -4,4 +4,14 @@ namespace Parky.ConsoleTest
     {
         public int Sum { get; set; }
     }
+
+    public interface A
+    {
+        string Prop { get; }
+    }
+
+    public class B : A
+    {
+        public string Prop { get; } = "B";
+    }
 }

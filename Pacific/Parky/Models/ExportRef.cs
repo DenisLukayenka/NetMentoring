@@ -5,7 +5,7 @@ namespace Parky.Models
 {
     public class ExportRef : Ref
     {
-        public ExportRef(Type type) : base(type)
+        public ExportRef(Type type, Type baseType = null) : base(type, baseType)
         {
         }
 

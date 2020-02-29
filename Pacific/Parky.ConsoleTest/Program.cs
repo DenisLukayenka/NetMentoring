@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 
 namespace Parky.ConsoleTest
 {
@@ -14,8 +15,13 @@ namespace Parky.ConsoleTest
 			container.AddType(typeof(TestModel));
 			container.AddType(typeof(SubModel));
 			container.AddType(typeof(PropertyModel));
+
+			container.AddType<B, A>();
 			
 			var result = container.CreateInstance<TestModel>();
+			var b = container.CreateInstance<A>();
+
+			Console.WriteLine(b.Prop);
 		}
 	}
 }
