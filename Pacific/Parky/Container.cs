@@ -4,21 +4,27 @@ using Parky.Models;
 using System.Collections.Generic;
 using Parky.Attributes;
 using Parky.Utilities;
+using Parky.Models.Visitors;
+using Parky.Models.Builders;
 
 namespace Parky
 {
 	public class Container : IContainer
 	{
 		private IDictionary<Type, Ref> _refs;
+		private IBuilder _builder;
+		private IVisitor _buildVisitor;
 
 		public Container()
 		{
 			this._refs = new Dictionary<Type, Ref>();
+			this._builder = new ObjectBuilder();
+			this._buildVisitor = new BuildRefVisitor(this._builder, this._refs);
 		}
 
 		public void AddAssembly(Assembly asm)
 		{
-			Type[] types = asm.GetTypes();
+			/*Type[] types = asm.GetTypes();
 
 			foreach(var type in types)
 			{
@@ -78,7 +84,12 @@ namespace Parky
 						}
 					}
 				}
-			}
+			}*/
+		}
+
+		public void AddType<T>()
+		{
+			this.AddType(typeof(T));
 		}
 
 		public void AddType(Type type)
@@ -89,9 +100,17 @@ namespace Parky
 			}
 		}
 
+		public void AddType<T, IT>() where T: IT
+		{
+			this.AddType(typeof(T), typeof(IT));
+		}
+
 		public void AddType(Type type, Type baseType)
 		{
-			throw new NotImplementedException();
+			if(!this._refs.TryGetValue(baseType, out var instance))
+			{
+				this._refs.Add(baseType, new Ref(type, baseType));
+			}
 		}
 
 		public T CreateInstance<T>()
@@ -103,83 +122,10 @@ namespace Parky
 		{
 			if(this._refs.TryGetValue(type, out var @ref))
 			{
-				object result = null;
-
-				if(@ref.IsConstructorInit)
-				{
-					result = this.InitializeObject(@ref.Type);
-				} 
-				if(@ref.IsPropertiesInit)
-				{
-					result = this.InitializeProperties(@ref.Type, result);
-				}
-				
-				if(!@ref.IsConstructorInit && !@ref.IsPropertiesInit)
-				{
-					result = this.CreateInst(@ref.Type, null);
-				}
-
-				return result;
+				return @ref.Build(this._buildVisitor);
 			}
 			
 			throw new ApplicationException($"Type: {type.FullName} was not found!");
-		}
-
-		private object InitializeObject(Type type)
-		{
-			var instanceRefs = type.GetAllConstructorsRefs();
-			if(instanceRefs.Length == 0)
-			{
-				return this.CreateInst(type, null);
-			}
-
-			object[] objParams = new object[instanceRefs.Length];
-			for(int i = 0; i < instanceRefs.Length; i++)
-			{
-				var paramObj = this.CreateInstance(instanceRefs[i]);
-				objParams[i] = paramObj;
-			}
-
-			return this.CreateInst(type, objParams);
-		}
-
-		private object InitializeProperties(Type type, object obj)
-		{
-			obj = obj is null? this.CreateInst(type, null) : obj;
-
-			var propertiesRefs = type.GetRegisteredProperties(this._refs);
-			if(propertiesRefs.Length == 0)
-			{
-				return obj;
-			}
-
-			object propertyTempRef;
-			foreach(PropertyInfo propertyInfo in propertiesRefs)
-			{
-				if(propertyInfo.GetValue(obj) == null)
-				{
-					propertyTempRef = this.CreateInstance(propertyInfo.PropertyType);
-					propertyInfo.SetValue(obj, propertyTempRef);
-				}
-			}
-
-			return obj;
-		}
-
-		private object CreateInst(Type type, object[] arguments)
-		{
-			object result = null;
-
-			try
-			{
-				result = Activator.CreateInstance(type, arguments);
-			}
-			catch(Exception ex)
-			{
-				throw new Exception($"Cannot create instance of type: {type.FullName}.", ex);
-			}
-
-			return result;
 		}
 	}
 }

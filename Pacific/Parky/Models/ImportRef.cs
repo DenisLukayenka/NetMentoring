@@ -3,15 +3,15 @@ using Parky.Models.Visitors;
 
 namespace Parky.Models
 {
-    public class ConstructorRef : Ref
+    public class ImportRef : Ref
     {
-        public ConstructorRef(Type type) : base(type)
+        public ImportRef(Type type) : base(type)
         {
         }
 
         public override object Build(IVisitor visitor)
         {
-            return visitor.VisitConstructorRef(this);
+            return visitor.VisitImportRef(this);
         }
     }
 }

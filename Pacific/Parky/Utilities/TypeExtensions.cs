@@ -21,7 +21,7 @@ namespace Parky.Utilities
             return type.GetProperties().Where(p => refs.ContainsKey(p.PropertyType)).ToArray();
         }
 
-        public static FieldInfo[] GetRegisteredFieds(this Type type, IDictionary<Type, Ref> refs)
+        public static FieldInfo[] GetRegisteredFields(this Type type, IDictionary<Type, Ref> refs)
         {
             return type.GetFields().Where(p => refs.ContainsKey(p.FieldType)).ToArray();
         }

@@ -1,4 +1,5 @@
 using System;
+using Parky.Models.Visitors;
 
 namespace Parky.Models
 {
@@ -8,7 +9,9 @@ namespace Parky.Models
         {
         }
 
-        public override bool IsConstructorInit { get; } = false;
-        public override bool IsPropertiesInit { get; } = false;
+        public override object Build(IVisitor visitor)
+        {
+            return visitor.VisitExportRef(this);
+        }
     }
 }

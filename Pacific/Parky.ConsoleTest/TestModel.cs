@@ -13,7 +13,7 @@ namespace Parky.ConsoleTest
         [Import]
         public PropertyModel PropertyModel { get; set; }
 
-        public SubModel SubModel { get; set; }
+        public SubModel SubModel { get; }
         public string Data { get; set; }
     }
 }
