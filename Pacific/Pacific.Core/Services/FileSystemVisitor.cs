@@ -12,6 +12,8 @@ namespace Pacific.Core.Services
         public event EventHandler<FinishExploreEventArgs> OnFinishExplore = delegate { };
         public event EventHandler<FileFindedEventArgs> OnFileFinded = delegate { };
         public event EventHandler<DirectoryFindedEventArgs> OnDirectoryFinded = delegate { };
+        public event EventHandler<FileFindedEventArgs> OnFilteredFileFinded = delegate { };
+        public event EventHandler<DirectoryFindedEventArgs> OnFilteredDirectoryFinded = delegate { };
 
         private Predicate<FileInfo> _fileFileter = (fi) => true;
         private Predicate<DirectoryInfo> _directoryFilter = (di) => true;
@@ -46,8 +48,10 @@ namespace Pacific.Core.Services
 
             while (this._fileSystemEnumerator.MoveNext())
             {
-                this.IncrementFilesDirectoriesCount(this._fileSystemEnumerator.Current);
-                yield return this._fileSystemEnumerator.Current;
+                if(this.ProcessFilesDirectoriesInfo(this._fileSystemEnumerator.Current))
+                {
+                    yield return this._fileSystemEnumerator.Current;
+                }
             }
 
             this.OnFinishExplore(this, new FinishExploreEventArgs 
@@ -64,19 +68,34 @@ namespace Pacific.Core.Services
             this._directoryCount = 0;
         }
 
-        private void IncrementFilesDirectoriesCount(dynamic currentInfo)
+        private bool ProcessFilesDirectoriesInfo(dynamic currentInfo)
         {
-            this.IncrementFilesDirectoriesCount(currentInfo);
+            return this.ProcessFilesDirectoriesInfo(currentInfo);
         }
 
-        private void IncrementFilesDirectoriesCount(FileInfo fileInfo)
+        private bool ProcessFilesDirectoriesInfo(FileInfo fileInfo)
         {
             this.OnFileFinded(this, new FileFindedEventArgs { FileInfo = fileInfo });
+            if(this._fileFileter(fileInfo))
+            {
+                this.OnFilteredFileFinded(this, new FileFindedEventArgs { FileInfo = fileInfo });
+                return true;
+            }
+
+            return false;
         }
 
-        private void IncrementFilesDirectoriesCount(DirectoryInfo directoryInfo)
+        private bool ProcessFilesDirectoriesInfo(DirectoryInfo directoryInfo)
         {
             this.OnDirectoryFinded(this, new DirectoryFindedEventArgs { DirectoryInfo = directoryInfo });
+
+            if(this._directoryFilter(directoryInfo))
+            {
+                this.OnFilteredDirectoryFinded(this, new DirectoryFindedEventArgs { DirectoryInfo = directoryInfo });
+                return true;
+            }
+
+            return false;
         }
 
         private class FileSystemEnumerator : IEnumerator<FileSystemInfo>
