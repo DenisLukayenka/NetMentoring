@@ -10,8 +10,4 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Pacific.Core\Pacific.Core.csproj" />
-  </ItemGroup>
 </Project>
