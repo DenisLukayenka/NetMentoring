@@ -22,6 +22,7 @@ namespace Pacific.Core.Services
         private int _filesCount;
         private int _directoryCount;
         private string _startPosition;
+        private bool _enabled;
 
         public FileSystemVisitor() : this(@"D:\Cash")
         {
@@ -39,6 +40,8 @@ namespace Pacific.Core.Services
             {
                 this._directoryCount++;
             };
+
+            this._enabled = true;
         }
 
         public IEnumerable<FileSystemInfo> Explore()
@@ -46,7 +49,7 @@ namespace Pacific.Core.Services
             this._fileSystemEnumerator.Reset();
             this.OnStartExplore(this, new StartExploreEventArgs { StartPosition = this._startPosition });
 
-            while (this._fileSystemEnumerator.MoveNext())
+            while (this._enabled && this._fileSystemEnumerator.MoveNext())
             {
                 if(this.ProcessFilesDirectoriesInfo(this._fileSystemEnumerator.Current))
                 {
@@ -66,6 +69,12 @@ namespace Pacific.Core.Services
         {
             this._filesCount = 0;
             this._directoryCount = 0;
+            this._enabled = true;
+        }
+
+        public void Stop()
+        {
+            this._enabled = false;
         }
 
         private bool ProcessFilesDirectoriesInfo(dynamic currentInfo)
