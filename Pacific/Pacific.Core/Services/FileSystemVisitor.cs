@@ -1,8 +1,9 @@
-using Pacific.Core.EventData;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+
+using Pacific.Core.EventData;
 
 namespace Pacific.Core.Services
 {
@@ -30,6 +31,7 @@ namespace Pacific.Core.Services
 
         public FileSystemVisitor(string startPosition)
         {
+            this._startPosition = startPosition;
             this._fileSystemEnumerator = new FileSystemEnumerator(startPosition);
             this.OnFileFinded += (sender, e) =>
             {
