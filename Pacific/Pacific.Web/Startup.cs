@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Pacific.Core.Services;
+using Microsoft.AspNetCore.SpaServices.AngularCli;
 
 namespace Pacific.Web
 {
@@ -25,6 +26,11 @@ namespace Pacific.Web
 		public void ConfigureServices(IServiceCollection services)
 		{
 			services.AddControllersWithViews();
+			services.AddSpaStaticFiles(configuration =>
+			{
+				configuration.RootPath = "PacificClient/dist";
+			});
+
 			services.AddTransient<FileSystemVisitor>();
 		}
 
@@ -43,16 +49,28 @@ namespace Pacific.Web
 			}
 			app.UseHttpsRedirection();
 			app.UseStaticFiles();
+			if (!env.IsDevelopment())
+            {
+                app.UseSpaStaticFiles();
+            }
 
 			app.UseRouting();
-
-			app.UseAuthorization();
 
 			app.UseEndpoints(endpoints =>
 			{
 				endpoints.MapControllerRoute(
 					name: "default",
-					pattern: "{controller=Home}/{action=Index}/{id?}");
+					pattern: "{controller}/{action=Index}/{id?}");
+			});
+
+			app.UseSpa(spa =>
+			{
+				spa.Options.SourcePath = "PacificClient";
+
+				if(env.IsDevelopment())
+				{
+					spa.UseAngularCliServer(npmScript: "start");
+				}
 			});
 		}
 	}
