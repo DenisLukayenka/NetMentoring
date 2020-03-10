@@ -1,12 +1,31 @@
 <div class="container">
-    <accordion [isAnimated]="true" [closeOthers]="true">
-        <accordion-group heading="FileSystemVisitor">
-            <span>FileSystemVisitor</span>
-        </accordion-group>
+    <mat-accordion class="accordion-headers">
+        <mat-expansion-panel>
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    This is header title
+                </mat-panel-title>
+                <mat-panel-description>
+                    Desc
+                </mat-panel-description>
+            </mat-expansion-panel-header>
 
-        <accordion-group heading="Future tasks">
-            <p>future data</p>
-        </accordion-group>
-    </accordion>
+            <mat-form-field>
+                <mat-label>First name</mat-label>
+                <input matInput>
+            </mat-form-field>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel>
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    Self aware panel
+                </mat-panel-title>
+                <mat-panel-description>
+                    Currently I am
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+            <p>I'm visible because I am open</p>
+        </mat-expansion-panel>
+    </mat-accordion>
 </div>
-

@@ -1,8 +1,11 @@
 import { NgModule } from '@angular/core';
 import { MainContainer } from './main-container/main-container.component';
 import { CommonModule } from '@angular/common';
-import { AccordionModule } from 'ngx-bootstrap/accordion';
-import { CollapseModule } from 'ngx-bootstrap/collapse';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { FormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
     declarations: [
@@ -10,8 +13,12 @@ import { CollapseModule } from 'ngx-bootstrap/collapse';
     ],
     imports: [
       CommonModule,
-      AccordionModule.forRoot(),
-      CollapseModule,
+      MatExpansionModule,
+      MatFormFieldModule,
+      MatInputModule,
+      FormsModule,
+      BrowserAnimationsModule,
+      MatExpansionModule,
     ],
     exports: [
         MainContainer,
