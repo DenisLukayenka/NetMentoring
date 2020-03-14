@@ -6,8 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Pacific.Core\Pacific.Core.csproj" />
     <ProjectReference Include="..\Parky\Parky.csproj" />
+    <ProjectReference Include="..\Pacific.Core\Pacific.Core.csproj" />
   </ItemGroup>
 
 </Project>

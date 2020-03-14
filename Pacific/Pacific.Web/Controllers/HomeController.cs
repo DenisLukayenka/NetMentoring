@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Mime;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Pacific.Web.Models;
@@ -10,8 +12,10 @@ using Pacific.Web.Models;
 namespace Pacific.Web.Controllers
 {
 	[ApiController]
-	[Route("[controller]")]
-	public class HomeController : Controller
+    [Route("/api/home")]
+	[EnableCors("AllowAll")]
+	[Produces(MediaTypeNames.Application.Json)]
+	public class HomeController : ControllerBase
 	{
 		private readonly ILogger<HomeController> _logger;
 
@@ -20,10 +24,10 @@ namespace Pacific.Web.Controllers
 			_logger = logger;
 		}
 
-		[HttpGet]
-		public IEnumerable<char> Get()
+		[HttpGet("getDefault")]
+		public JsonResult Get()
 		{
-			return "string";
+			return new JsonResult(new string[]{ "string", "data" });
 		}
 	}
 }

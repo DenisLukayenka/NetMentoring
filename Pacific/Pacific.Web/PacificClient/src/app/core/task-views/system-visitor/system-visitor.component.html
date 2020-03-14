@@ -1,9 +1,16 @@
 <pac-task-view [header]="header" [main]="main" [footer]="footer">
     <ng-template #header>
-        <p>Header</p>
+        <form class="inline-form">
+            <mat-form-field class="inline-form-item">
+                <mat-label>Path to folder: </mat-label>
+                <input [(ngModel)]="directoryPath" name="directoryPath" matInput/>
+            </mat-form-field>
+        </form>
+        <mat-divider></mat-divider>
     </ng-template>
     <ng-template #main>
-        <p>Main</p>
+        <button mat-raised-button color="primary" (click)="FetchFolderData()">Fetch data</button>
+        <p *ngFor='let str of list$ | async'>{{str}}</p>
     </ng-template>
     <ng-template #footer>
         <p>Footer</p>

@@ -25,13 +25,16 @@ namespace Pacific.Web
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-			services.AddControllersWithViews();
+			services.AddControllers();
 			services.AddSpaStaticFiles(configuration =>
 			{
 				configuration.RootPath = "PacificClient/dist";
 			});
 
 			services.AddTransient<FileSystemVisitor>();
+			services.AddCors(option => option.AddPolicy("AllowAll", p => p.AllowAnyHeader()
+																		.AllowAnyOrigin()
+																		.AllowAnyMethod()));
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,6 +51,7 @@ namespace Pacific.Web
 				app.UseHsts();
 			}
 			app.UseHttpsRedirection();
+
 			app.UseStaticFiles();
 			if (!env.IsDevelopment())
             {
@@ -55,12 +59,12 @@ namespace Pacific.Web
             }
 
 			app.UseRouting();
+			app.UseCors("AllowAll");
 
+			app.UseAuthorization();
 			app.UseEndpoints(endpoints =>
 			{
-				endpoints.MapControllerRoute(
-					name: "default",
-					pattern: "{controller}/{action=Index}/{id?}");
+				endpoints.MapControllers();
 			});
 
 			app.UseSpa(spa =>

@@ -1,0 +1,14 @@
+.full-width {
+    width: 100%;
+}
+
+.inline-form {
+    display: flex;
+    align-items: baseline;
+    width: 100%;
+}
+
+.inline-form-item {
+    flex: auto;
+    margin: 5px;
+}
