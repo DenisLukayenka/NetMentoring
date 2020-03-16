@@ -10,6 +10,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Pacific.Core.Services;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
+using Pacific.Web.Models.Handlers;
+using Pacific.Web.Models.Requests;
+using Pacific.Web.Models.Responses;
 
 namespace Pacific.Web
 {
@@ -32,6 +35,7 @@ namespace Pacific.Web
 			});
 
 			services.AddTransient<FileSystemVisitor>();
+			services.AddTransient<IHandler, GenericHandler>();
 			services.AddCors(option => option.AddPolicy("AllowAll", p => p.AllowAnyHeader()
 																		.AllowAnyOrigin()
 																		.AllowAnyMethod()));

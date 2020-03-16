@@ -60,7 +60,7 @@ namespace Pacific.Core.Services
             }
 
             this.OnFinishExplore(this, new FinishExploreEventArgs 
-            { 
+            {
                 StartPosition = this._startPosition,
                 DirectoriesCount = this._directoryCount,
                 FilesCount = this._filesCount

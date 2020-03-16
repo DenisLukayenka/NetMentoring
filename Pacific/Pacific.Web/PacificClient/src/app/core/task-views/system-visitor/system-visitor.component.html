@@ -10,7 +10,7 @@
     </ng-template>
     <ng-template #main>
         <button mat-raised-button color="primary" (click)="FetchFolderData()">Fetch data</button>
-        <p *ngFor='let str of list$ | async'>{{str}}</p>
+        <p *ngFor='let fileInfo of list$ | async'>{{fileInfo.name}}</p>
     </ng-template>
     <ng-template #footer>
         <p>Footer</p>

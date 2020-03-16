@@ -1,21 +1,21 @@
 import { Injectable } from "@angular/core";
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ROOT_URL } from '../Models/Config';
+import { SystemVisitorResponse } from '../Models/Responses/SystemVisitorResponse';
+import { SystemVisitorRequest } from '../Models/Requests/SystemVisitorRequest';
 
 @Injectable({
     providedIn: 'root',
 })
 export class DataFetcher {
-    private headers: {
-
-    }
     constructor(private http: HttpClient) {}
 
-    FetchDefaultData(): Observable<string[]> {
+    FetchFileSystemData(request: SystemVisitorRequest): Observable<SystemVisitorResponse> {
         const headers = new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8').set('Accept', '*/*');
-      
-        
-        return this.http.get<string[]>(ROOT_URL + '/Home/GetDefault', { headers });
+        const httpParams = new HttpParams()
+                                .set('FolderPath', request.FolderPath);
+
+        return this.http.get<SystemVisitorResponse>(ROOT_URL + '/request/GetSystemFiles', { headers: headers, params: httpParams });
     }
 }
