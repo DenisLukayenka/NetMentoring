@@ -16,7 +16,7 @@ namespace Pacific.Core.Services
         public event EventHandler<FileFindedEventArgs> OnFilteredFileFinded = delegate { };
         public event EventHandler<DirectoryFindedEventArgs> OnFilteredDirectoryFinded = delegate { };
 
-        private Predicate<FileInfo> _fileFileter = (fi) => true;
+        private Predicate<FileInfo> _fileFilteter = (fi) => true;
         private Predicate<DirectoryInfo> _directoryFilter = (di) => true;
 
         private FileSystemEnumerator _fileSystemEnumerator;
@@ -24,12 +24,14 @@ namespace Pacific.Core.Services
         private int _directoryCount;
         private string _startPosition;
         private bool _enabled;
+        private bool _showFilteredFiles;
+        private bool _showFilteredDirectories;
 
-        public FileSystemVisitor() : this(@"D:\Cash")
+        public FileSystemVisitor(string startPosition): this(startPosition, true, true)
         {
         }
 
-        public FileSystemVisitor(string startPosition)
+        public FileSystemVisitor(string startPosition, bool showFilteredFiles, bool showFilteredDirectories)
         {
             this._startPosition = startPosition;
             this._fileSystemEnumerator = new FileSystemEnumerator(startPosition);
@@ -44,6 +46,8 @@ namespace Pacific.Core.Services
             };
 
             this._enabled = true;
+            this._showFilteredDirectories = showFilteredDirectories;
+            this._showFilteredFiles = showFilteredFiles;
         }
 
         public IEnumerable<FileSystemInfo> Explore()
@@ -87,9 +91,13 @@ namespace Pacific.Core.Services
         private bool ProcessFilesDirectoriesInfo(FileInfo fileInfo)
         {
             this.OnFileFinded(this, new FileFindedEventArgs { FileInfo = fileInfo });
-            if(this._fileFileter(fileInfo))
+
+            if(this._showFilteredFiles)
             {
-                this.OnFilteredFileFinded(this, new FileFindedEventArgs { FileInfo = fileInfo });
+                if(this._fileFilteter(fileInfo))
+                {
+                    this.OnFilteredFileFinded(this, new FileFindedEventArgs { FileInfo = fileInfo });
+                }
                 return true;
             }
 
@@ -100,9 +108,13 @@ namespace Pacific.Core.Services
         {
             this.OnDirectoryFinded(this, new DirectoryFindedEventArgs { DirectoryInfo = directoryInfo });
 
-            if(this._directoryFilter(directoryInfo))
+            if(this._showFilteredDirectories)
             {
-                this.OnFilteredDirectoryFinded(this, new DirectoryFindedEventArgs { DirectoryInfo = directoryInfo });
+                if(this._directoryFilter(directoryInfo))
+                {
+                    this.OnFilteredDirectoryFinded(this, new DirectoryFindedEventArgs { DirectoryInfo = directoryInfo });
+                }
+
                 return true;
             }
 

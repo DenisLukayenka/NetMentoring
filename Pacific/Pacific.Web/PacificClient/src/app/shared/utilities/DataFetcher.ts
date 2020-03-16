@@ -14,7 +14,9 @@ export class DataFetcher {
     FetchFileSystemData(request: SystemVisitorRequest): Observable<SystemVisitorResponse> {
         const headers = new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8').set('Accept', '*/*');
         const httpParams = new HttpParams()
-                                .set('FolderPath', request.FolderPath);
+                                .set('FolderPath', request.FolderPath)
+                                .set('ShowFilteredFiles', request.ShowFilteredFiles.toString())
+                                .set('ShowFilteredDirectories', request.ShowFilteredDirectories.toString());
 
         return this.http.get<SystemVisitorResponse>(ROOT_URL + '/request/GetSystemFiles', { headers: headers, params: httpParams });
     }

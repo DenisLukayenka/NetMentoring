@@ -34,7 +34,6 @@ namespace Pacific.Web
 				configuration.RootPath = "PacificClient/dist";
 			});
 
-			services.AddTransient<FileSystemVisitor>();
 			services.AddTransient<IHandler, GenericHandler>();
 			services.AddCors(option => option.AddPolicy("AllowAll", p => p.AllowAnyHeader()
 																		.AllowAnyOrigin()

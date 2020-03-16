@@ -6,11 +6,24 @@
                 <input [(ngModel)]="directoryPath" name="directoryPath" matInput/>
             </mat-form-field>
         </form>
-        <mat-divider></mat-divider>
+        <mat-divider class="divider"></mat-divider>
     </ng-template>
     <ng-template #main>
-        <button mat-raised-button color="primary" (click)="FetchFolderData()">Fetch data</button>
-        <p *ngFor='let fileInfo of list$ | async'>{{fileInfo.name}}</p>
+        <form class="inline-form">
+            <div class="inline-form-item">
+                <mat-checkbox [(ngModel)]="showFilteredFiles" name="showFilteredFiles" class="form-element">Show filtered files</mat-checkbox>
+                <mat-checkbox [(ngModel)]="showFilteredDirectories" name="showFilteredDirectories" class="form-element">Show filtered directories</mat-checkbox>
+            </div>
+
+            <button mat-raised-button color="primary" (click)="fetchFolderData()">Fetch data</button>
+        </form>
+
+        <mat-divider class="divider"></mat-divider>
+
+        <cdk-virtual-scroll-viewport itemSize="50" class="scrollable-viewport">
+            <div *cdkVirtualFor='let fileInfo of list$ | async' class="data-item">{{fileInfo.name}}</div>
+        </cdk-virtual-scroll-viewport>
+        
     </ng-template>
     <ng-template #footer>
         <p>Footer</p>

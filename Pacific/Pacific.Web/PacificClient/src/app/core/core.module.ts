@@ -7,6 +7,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { FormsModule } from '@angular/forms';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { SharedModule } from '../shared/shared.module';
 import { SystemVisitorComponent } from './task-views/system-visitor/system-visitor.component';
 
@@ -18,6 +20,8 @@ import { SystemVisitorComponent } from './task-views/system-visitor/system-visit
     imports: [
       CommonModule,
 
+      MatCheckboxModule,
+      ScrollingModule,
       MatDividerModule,
       MatButtonModule,
       MatExpansionModule,
