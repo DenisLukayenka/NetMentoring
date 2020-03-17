@@ -9,4 +9,8 @@ export class TaskViewComponent {
     @Input() header: TemplateRef<{ item: any }>;
     @Input() main: TemplateRef<{ item: any }>;
     @Input() footer: TemplateRef<{ item: any }>;
+
+    item: {
+        data: 'data'
+    }
 }

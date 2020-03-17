@@ -3,6 +3,7 @@ using Lib.Net.Http.WebPush.Authentication;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Pacific.Core.Models.Subscriptions;
+using Pacific.Core.Services;
 using Pacific.Core.Services.Subscriptions;
 using System;
 using System.Threading;
@@ -10,18 +11,15 @@ using System.Threading.Tasks;
 
 namespace Pacific.Core.Producers
 {
-	public class WeatherNotificationsProducer : BackgroundService
+	public class FileSystemVisitorNotificationProducer : BackgroundService
 	{
-        private const int NOTIFICATION_FREQUENCY = 60000;
-
-        private readonly Random _random = new Random();
-
         private readonly IPushSubscriptionsService _pushSubscriptionsService;
         private readonly PushServiceClient _pushClient;
+        private bool isFileFound = false;
 
-        public WeatherNotificationsProducer(IOptions<PushNotificationsOptions> options, IPushSubscriptionsService pushSubscriptionsService, PushServiceClient pushClient)
+        public FileSystemVisitorNotificationProducer(IOptions<PushNotificationsOptions> options, IPushSubscriptionsService pushSubscriptionsService, PushServiceClient pushClient)
         {
-            _pushSubscriptionsService = pushSubscriptionsService;
+            this._pushSubscriptionsService = pushSubscriptionsService;
 
             _pushClient = pushClient;
             _pushClient.DefaultAuthentication = new VapidAuthentication(options.Value.PublicKey, options.Value.PrivateKey)
@@ -31,14 +29,16 @@ namespace Pacific.Core.Producers
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-        {
-            while (!stoppingToken.IsCancellationRequested)
+		{
+			while (!stoppingToken.IsCancellationRequested)
             {
-                await Task.Delay(NOTIFICATION_FREQUENCY, stoppingToken);
-
-                SendNotifications(_random.Next(-20, 55), stoppingToken);
+                if (this.isFileFound)
+                {
+                    await Task.Delay(2000);
+                    this.isFileFound = false;
+                }
             }
-        }
+		}
 
         private void SendNotifications(int temperatureC, CancellationToken stoppingToken)
         {
@@ -54,6 +54,11 @@ namespace Pacific.Core.Producers
                 // Fire-and-forget 
                 _pushClient.RequestPushMessageDeliveryAsync(subscription, notification, stoppingToken);
             }
+        }
+
+        public static void OnFileFound(object sender, EventArgs args)
+        {
+
         }
     }
 }
