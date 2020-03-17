@@ -19,7 +19,7 @@ export class SystemVisitorComponent implements AfterViewInit, OnInit {
     showFilteredDirectories: boolean;
     list$: Observable<FileData[]>;
 
-    @ViewChild(CdkVirtualScrollViewport, {static: false}) viewport: CdkVirtualScrollViewport;
+    @ViewChild(CdkVirtualScrollViewport) viewport: CdkVirtualScrollViewport;
 
     constructor(private fetcher: DataFetcher){}
 

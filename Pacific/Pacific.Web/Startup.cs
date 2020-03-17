@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Pacific.Web.Models.Handlers;
 using Pacific.Web.Models.Requests;
 using Pacific.Web.Models.Responses;
+using Pacific.Web.Models;
+using Pacific.Core.Models.Subscriptions;
 
 namespace Pacific.Web
 {
@@ -38,6 +40,8 @@ namespace Pacific.Web
 			services.AddCors(option => option.AddPolicy("AllowAll", p => p.AllowAnyHeader()
 																		.AllowAnyOrigin()
 																		.AllowAnyMethod()));
+
+			services.Configure<PushNotificationsOptions>(Configuration.GetSection("PushNotifications"));
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -73,11 +77,6 @@ namespace Pacific.Web
 			app.UseSpa(spa =>
 			{
 				spa.Options.SourcePath = "PacificClient";
-
-				if(env.IsDevelopment())
-				{
-					spa.UseAngularCliServer(npmScript: "start");
-				}
 			});
 		}
 	}

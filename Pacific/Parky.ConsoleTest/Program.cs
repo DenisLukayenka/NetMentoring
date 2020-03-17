@@ -25,7 +25,7 @@ namespace Parky.ConsoleTest
 
 			Console.WriteLine(b.Prop);*/
 
-			var visitor = new FileSystemVisitor();
+			var visitor = new FileSystemVisitor(@"C:\Users\dzianis_lukayenka\Desktop\New folder\ClientApp\src");
 			visitor.OnFinishExplore += Finish;
 			visitor.OnStartExplore += Start;
 
