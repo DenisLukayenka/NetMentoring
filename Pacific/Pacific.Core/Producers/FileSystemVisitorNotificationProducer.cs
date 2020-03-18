@@ -32,11 +32,8 @@ namespace Pacific.Core.Producers
 		{
 			while (!stoppingToken.IsCancellationRequested)
             {
-                if (this.isFileFound)
-                {
-                    await Task.Delay(2000);
-                    this.isFileFound = false;
-                }
+                await Task.Delay(2000);
+                SendNotifications(0, stoppingToken);
             }
 		}
 
