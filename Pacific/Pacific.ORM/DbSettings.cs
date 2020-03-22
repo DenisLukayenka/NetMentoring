@@ -1,11 +1,17 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
 using LinqToDB.Configuration;
+using LinqToDB.Common;
 
 namespace Pacific.ORM
 {
 	public class DbSettings : ILinqToDBSettings
 	{
+		public DbSettings()
+		{
+			Configuration.Linq.AllowMultipleQuery = true;
+		}
+
 		public IEnumerable<IDataProviderSettings> DataProviders => Enumerable.Empty<IDataProviderSettings>();
 
 		public string DefaultConfiguration => "SqlServer";

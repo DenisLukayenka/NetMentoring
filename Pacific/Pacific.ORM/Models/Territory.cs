@@ -1,4 +1,5 @@
 ﻿using LinqToDB.Mapping;
+using System.Collections.Generic;
 
 namespace Pacific.ORM.Models
 {
@@ -14,9 +15,12 @@ namespace Pacific.ORM.Models
 		public string Description { get; set; }
 
 		[Column("RegionID")]
-		public int RegionID { get; set; }
+		public int RegionId { get; set; }
 
-		[Association(ThisKey = "RegionID", OtherKey = "Id")]
+		[Association(ThisKey = "RegionId", OtherKey = "Id")]
 		public virtual Region Region { get; set; }
+
+		[Association(Relationship = Relationship.OneToMany, ThisKey = "Id", OtherKey = "TerritoryId")]
+		public virtual ICollection<EmployeeTerritory> EmployeeTerritories { get; set; } = new List<EmployeeTerritory>();
 	}
 }

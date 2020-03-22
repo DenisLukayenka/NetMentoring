@@ -1,4 +1,5 @@
 ﻿using LinqToDB.Mapping;
+using System.Collections.Generic;
 
 namespace Pacific.ORM.Models
 {
@@ -19,5 +20,8 @@ namespace Pacific.ORM.Models
 		[Column]
 		[DataType(LinqToDB.DataType.Image)]
 		public byte[] Picture { get; set; }
+
+		[Association(ThisKey = "Id", OtherKey = "CategoryId")]
+		public virtual ICollection<Product> Products { get; set; }
 	}
 }
