@@ -6,7 +6,7 @@ using System;
 namespace Pacific.ORM.Tests
 {
 	[TestFixture]
-	public class TestLinq2Db
+	public class TestDataFetching
 	{
 		[SetUp]
 		public void InitTests()

@@ -1,4 +1,5 @@
-﻿using LinqToDB.Mapping;
+﻿using LinqToDB;
+using LinqToDB.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -71,6 +72,6 @@ namespace Pacific.ORM.Models
 		public virtual ICollection<EmployeeTerritory> Territories { get; set; } = new List<EmployeeTerritory>();
 
 		[Association(ThisKey = "Id", OtherKey = "EmployeeId")]
-		public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
+		public virtual ICollection<Order> Orders { get; set; }
 	}
 }
