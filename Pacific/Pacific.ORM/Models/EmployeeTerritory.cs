@@ -8,7 +8,7 @@ namespace Pacific.ORM.Models
 		[Column("EmployeeID")]
 		public int EmployeeId { get; set; }
 
-		[Association(Relationship = Relationship.ManyToOne, ThisKey = "EmployeeIDd", OtherKey = "Id")]
+		[Association(Relationship = Relationship.ManyToOne, ThisKey = "EmployeeId", OtherKey = "Id")]
 		public virtual Employee Employee { get; set; }
 
 		[Column("TerritoryID")]

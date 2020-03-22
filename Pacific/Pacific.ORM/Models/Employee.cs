@@ -69,5 +69,8 @@ namespace Pacific.ORM.Models
 
 		[Association(Relationship = Relationship.OneToMany, ThisKey = "Id", OtherKey = "EmployeeId")]
 		public virtual ICollection<EmployeeTerritory> Territories { get; set; } = new List<EmployeeTerritory>();
+
+		[Association(ThisKey = "Id", OtherKey = "EmployeeId")]
+		public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
 	}
 }

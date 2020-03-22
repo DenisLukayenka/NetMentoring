@@ -43,5 +43,8 @@ namespace Pacific.ORM.Models
 
 		[Column]
 		public bool Discontinued { get; set; }
+
+		[Association(ThisKey = "Id", OtherKey = "ProductId")]
+		public virtual ICollection<OrderDetail> OrderDetails { get; set; }
 	}
 }

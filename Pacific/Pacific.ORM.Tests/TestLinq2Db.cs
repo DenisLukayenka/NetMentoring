@@ -64,7 +64,7 @@ namespace Pacific.ORM.Tests
 		{
 			using (var db = new NothwindDbContext())
 			{
-				foreach (var eml in db.Employees.LoadWith(e => e.ReportsTo))
+				foreach (var eml in db.Employees.LoadWith(e => e.ReportsTo).LoadWith(e => e.Orders))
 				{
 					Console.WriteLine($"{eml.Id} | " +
 						$"{eml.FirstName} | " +
@@ -83,7 +83,8 @@ namespace Pacific.ORM.Tests
 						$"{eml.Photo.Length} | " +
 						$"{eml.Notes} | " +
 						$"-----{eml.ReportsToId} | " +
-						$"{eml.PhotoPath} | ");
+						$"{eml.PhotoPath} |" +
+						$"{eml.Orders.Count} |");
 				}
 			}
 
@@ -135,7 +136,10 @@ namespace Pacific.ORM.Tests
 		{
 			using (var db = new NothwindDbContext())
 			{
-				foreach (var p in db.Products.LoadWith(p => p.Category).LoadWith(p => p.Supplier))
+				foreach (var p in db.Products
+					.LoadWith(p => p.Category)
+					.LoadWith(p => p.Supplier)
+					.LoadWith(p => p.OrderDetails))
 				{
 					Console.WriteLine($"{p.Id} | " +
 						$"{p.Name} | " +
@@ -148,7 +152,147 @@ namespace Pacific.ORM.Tests
 						$"{p.ReorderLevel} | " +
 						$"{p.Discontinued} | " +
 						$"{p.Category?.Id} | " +
-						$"{p.Supplier.Id} | ");
+						$"{p.Supplier.Id} | " +
+						$"{p.OrderDetails?.Count}");
+				}
+			}
+
+			Assert.True(true);
+		}
+
+		[Test]
+		public void TesOrdersDataFetchFromDb()
+		{
+			using (var db = new NothwindDbContext())
+			{
+				foreach (var p in db.Orders
+					.LoadWith(p => p.Employee)
+					.LoadWith(p => p.OrderDetails)
+					.LoadWith(p => p.Shipper)
+					.LoadWith(p => p.Customer))
+				{
+					Console.WriteLine($"{p.Id} | " +
+						$"{p.CustomerId} | " +
+						$"{p.EmployeeId} | " +
+						$"{p.OrderDate} | " +
+						$"{p.RequiredDate} | " +
+						$"{p.ShippedDate} | " +
+						$"{p.ShipVia} | " +
+						$"{p.Freight} | " +
+						$"{p.ShipName} | " +
+						$"{p.ShipAddress} | " +
+						$"{p.ShipCity} | " +
+						$"{p.ShipRegion} | " +
+						$"{p.ShipPostalCode} | " +
+						$"{p.ShipCountry} | " +
+						$"{p.Employee?.Id} | " + 
+						$"{p.OrderDetails?.Count} | " + 
+						$"{p.Shipper.Id} | " + 
+						$"{p.Customer?.Id}");
+				}
+			}
+
+			Assert.True(true);
+		}
+
+		[Test]
+		public void TesOrderDetailsDataFetchFromDb()
+		{
+			using (var db = new NothwindDbContext())
+			{
+				foreach (var p in db.OrderDetails
+					.LoadWith(p => p.Order)
+					.LoadWith(p => p.Product))
+				{
+					Console.WriteLine($"{p.OrderId} | " +
+						$"{p.ProductId} | " +
+						$"{p.UnitPrice} | " +
+						$"{p.Quantity} | " +
+						$"{p.Discount} | " +
+						$"{p.Order.Id} | " +
+						$"{p.Product.Id} | ");
+				}
+			}
+
+			Assert.True(true);
+		}
+
+		[Test]
+		public void TesShippersDataFetchFromDb()
+		{
+			using (var db = new NothwindDbContext())
+			{
+				foreach (var p in db.Shippers
+					.LoadWith(p => p.Orders))
+				{
+					Console.WriteLine($"{p.Id} | " +
+						$"{p.CompanyName} | " +
+						$"{p.Phone} | " +
+						$"{p.Orders.Count} | ");
+				}
+			}
+
+			Assert.True(true);
+		}
+
+		[Test]
+		public void TesCustomerDemographicsFetchFromDb()
+		{
+			using (var db = new NothwindDbContext())
+			{
+				foreach (var p in db.CustomerDemographics
+					.LoadWith(p => p.CustomerCustomerDemographics))
+				{
+					Console.WriteLine($"{p.Id} | " +
+						$"{p.Description} | " +
+						$"{p.CustomerCustomerDemographics?.Count}");
+				}
+			}
+
+			Assert.True(true);
+		}
+
+		[Test]
+		public void TesCustomersFetchFromDb()
+		{
+			using (var db = new NothwindDbContext())
+			{
+				foreach (var p in db.Customers
+					.LoadWith(c => c.Orders)
+					.LoadWith(c => c.CustomerCustomerDemographics))
+				{
+					Console.WriteLine($"{p.Id} | " +
+						$"{p.CompanyName} | " +
+						$"{p.ContactName} | " +
+						$"{p.ContactTitle} | " +
+						$"{p.Address} | " +
+						$"{p.City} | " +
+						$"{p.Region} | " +
+						$"{p.PostalCode} | " +
+						$"{p.Country} | " +
+						$"{p.Phone} | " +
+						$"{p.Fax} | " +
+						$"{p.Orders?.Count} | " +
+						$"{p.CustomerCustomerDemographics?.Count}");
+				}
+			}
+
+			Assert.True(true);
+		}
+
+		[Test]
+		public void TesCustomerCustomerDemographicsFetchFromDb()
+		{
+			using (var db = new NothwindDbContext())
+			{
+				foreach (var p in db.CustomerCustomerDemographics
+					.LoadWith(c => c.Customer)
+					.LoadWith(c => c.Type))
+				{
+					Console.WriteLine($"{p.CustomerId} | " +
+						$"{p.TypeId} | " +
+						$"{p.Customer.Id} | " +
+						$"{p.Type.Description} | ");
 				}
 			}
 

@@ -16,5 +16,11 @@ namespace Pacific.ORM
 		public ITable<Supplier> Suppliers => GetTable<Supplier>();
 
 		public ITable<Product> Products => GetTable<Product>();
+		public ITable<Order> Orders => GetTable<Order>();
+		public ITable<OrderDetail> OrderDetails => GetTable<OrderDetail>();
+		public ITable<Shipper> Shippers => GetTable<Shipper>();
+		public ITable<CustomerDemographic> CustomerDemographics => GetTable<CustomerDemographic>();
+		public ITable<Customer> Customers => GetTable<Customer>();
+		public ITable<CustomerCustomerDemographics> CustomerCustomerDemographics => GetTable<CustomerCustomerDemographics>();
 	}
 }
