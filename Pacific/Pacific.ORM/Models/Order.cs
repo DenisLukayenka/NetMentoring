@@ -28,7 +28,8 @@ namespace Pacific.ORM.Models
 		public DateTime RequiredDate { get; set; }
 
 		[Column]
-		public DateTime ShippedDate { get; set; }
+		[Nullable]
+		public DateTime? ShippedDate { get; set; }
 
 		[Column]
 		public int ShipVia { get; set; }
