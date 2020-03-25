@@ -3,16 +3,16 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "PacificClient": {
+    "pacificclient": {
+      "root": "",
+      "sourceRoot": "src",
       "projectType": "application",
+      "prefix": "app",
       "schematics": {
         "@schematics/angular:component": {
           "style": "scss"
         }
       },
-      "root": "",
-      "sourceRoot": "src",
-      "prefix": "app",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -23,7 +23,6 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
-            "aot": true,
             "assets": [
               "src/favicon.ico",
               "src/assets",
@@ -48,41 +47,29 @@
               "sourceMap": false,
               "extractCss": true,
               "namedChunks": false,
+              "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
-                  "maximumError": "10kb"
-                }
-              ],
-              "serviceWorker": true,
-              "ngswConfigPath": "ngsw-config.json"
+              "serviceWorker": true
             }
           }
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "PacificClient:build"
+            "browserTarget": "pacificclient:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "PacificClient:build:production"
+              "browserTarget": "pacificclient:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "PacificClient:build"
+            "browserTarget": "pacificclient:build"
           }
         },
         "test": {
@@ -109,8 +96,7 @@
           "options": {
             "tsConfig": [
               "tsconfig.app.json",
-              "tsconfig.spec.json",
-              "e2e/tsconfig.json"
+              "tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"
@@ -142,21 +128,29 @@
               "vendorChunk": false
             }
           }
-        },
+        }
+      }
+    },
+    "pacificclient-e2e": {
+      "root": "e2e/",
+      "projectType": "application",
+      "architect": {
         "e2e": {
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "PacificClient:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "PacificClient:serve:production"
-            }
+            "devServerTarget": "pacificclient:serve"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": "e2e/tsconfig.e2e.json",
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
     }
   },
-  "defaultProject": "PacificClient"
+  "defaultProject": "pacificclient"
 }

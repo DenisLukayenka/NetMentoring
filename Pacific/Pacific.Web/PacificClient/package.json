@@ -1,11 +1,11 @@
 {
-  "name": "PacificClient",
+  "name": "pacificclient",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "build:ssr": "ng run PacificClient:server:dev",
+    "build:ssr": "ng run pacificclient:server:dev",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
@@ -21,12 +21,14 @@
     "@angular/material": "^8.2.3",
     "@angular/platform-browser": "~9.0.6",
     "@angular/platform-browser-dynamic": "~9.0.6",
+    "@angular/platform-server": "~9.0.6",
     "@angular/router": "~9.0.6",
     "@angular/service-worker": "~9.0.6",
+    "@nguniversal/module-map-ngfactory-loader": "^8.2.6",
+    "@types/jest": "^25.1.4",
     "bootstrap": "^4.4.1",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",
-    "web-push": "^3.4.3",
     "zone.js": "~0.10.2"
   },
   "devDependencies": {

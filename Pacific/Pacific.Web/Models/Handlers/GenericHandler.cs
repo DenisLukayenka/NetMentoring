@@ -28,7 +28,7 @@ namespace Pacific.Web.Models.Handlers
 
             return new SystemVisitorResponse()
             {
-                files = this._visitor.Explore().ToArray()
+                Files = this._visitor.Explore().ToArray()
             };
         }
     }

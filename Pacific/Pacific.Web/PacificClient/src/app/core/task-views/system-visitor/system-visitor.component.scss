@@ -5,6 +5,7 @@
 .inline-form {
     display: flex;
     align-items: baseline;
+    justify-content: space-between;
     width: 100%;
 }
 
@@ -32,4 +33,9 @@
 
 .form-element {
     margin: 5px;
+}
+
+.centered {
+    display: flex;
+    justify-content: center;
 }

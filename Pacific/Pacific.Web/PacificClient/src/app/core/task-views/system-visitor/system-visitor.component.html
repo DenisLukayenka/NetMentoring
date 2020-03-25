@@ -16,17 +16,27 @@
             </div>
 
             <button mat-raised-button color="primary" (click)="fetchFolderData()">Fetch data</button>
-            <app-push-subscriber></app-push-subscriber>
+            <button class="ml-2" mat-button color="warn" (click)="resetData()">Reset</button>
         </form>
 
         <mat-divider class="divider"></mat-divider>
 
-        <cdk-virtual-scroll-viewport itemSize="50" class="scrollable-viewport">
-            <div *cdkVirtualFor='let fileInfo of list$ | async' class="data-item">{{fileInfo.name}}</div>
-        </cdk-virtual-scroll-viewport>
-        
+        <mat-list>
+            <cdk-virtual-scroll-viewport itemSize="10" class="scrollable-viewport" minBufferPx="50" maxBufferPx="100">
+                <ng-container *ngIf="isLoading; else showList">
+                    <div class="centered">Loading...</div>
+                </ng-container>
+                <ng-template #showList>
+                    <mat-list-item *cdkVirtualFor="let fileInfo of list$ | async">
+                        <div mat-line>Name: {{fileInfo.name || 'Loading...'}}</div>
+                        <div mat-line>LastModified: {{(fileInfo.lastWriteTime | date) || 'Loading...'}} </div>
+                    </mat-list-item>
+                </ng-template>
+            </cdk-virtual-scroll-viewport>
+        </mat-list>        
     </ng-template>
     <ng-template #footer>
-        <p>Footer</p>
+        <mat-divider class="divider"></mat-divider>
+        <span>Items count: {{itemsCount}}</span>
     </ng-template>
 </pac-task-view>

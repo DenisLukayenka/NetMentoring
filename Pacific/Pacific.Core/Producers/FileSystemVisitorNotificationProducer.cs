@@ -32,7 +32,7 @@ namespace Pacific.Core.Producers
 		{
 			while (!stoppingToken.IsCancellationRequested)
             {
-                await Task.Delay(2000);
+                await Task.Delay(10000);
                 SendNotifications(0, stoppingToken);
             }
 		}
