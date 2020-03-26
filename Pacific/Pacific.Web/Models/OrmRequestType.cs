@@ -5,5 +5,6 @@
 		SelectProductsWithCategoryAndSuppliers = 0,
 		SelectEmployees,
 		SelectRegionStatistic,
+		SelectEmployeeShippers,
 	}
 }

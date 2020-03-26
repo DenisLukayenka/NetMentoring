@@ -69,6 +69,11 @@ namespace Pacific.Web.Models.Handlers
                     {
                         RegionStatistics = await this._ormService.SelectRegionStatisticAsync()
                     };
+                case OrmRequestType.SelectEmployeeShippers:
+                    return new EmployeeShipperResponse
+                    {
+                        EmployeeShippers = await this._ormService.SelectEmployeeShippersAsync()
+                    };
             }
 
             throw new ArgumentException("Request type is incorrect");

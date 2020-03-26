@@ -2,7 +2,9 @@
 using Pacific.ORM;
 using Pacific.ORM.HelpModels;
 using Pacific.ORM.Models;
+using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -39,6 +41,34 @@ namespace Pacific.Core.Services.Orm
 					Region = g.Key,
 					EmployeesCount = g.Count()
 				}).ToArrayAsync();
+			}
+		}
+
+		public async Task<IEnumerable<EmployeeShippers>> SelectEmployeeShippersAsync()
+		{
+			// Used group by to distinct same values
+			// P.S. IEqualityComparer for distinct not worked???
+			using (var db = new NothwindDbContext())
+			{
+				return await db.Orders.LoadWith(o => o.Shipper).LoadWith(o => o.Employee)
+					.GroupBy(o => new 
+					{ 
+						o.ShipVia, 
+						o.EmployeeId, 
+						o.Shipper.CompanyName, 
+						o.Employee.FirstName,
+						o.Employee.LastName, 
+						o.Shipper.Phone
+					})
+					.Select(o => new EmployeeShippers
+					{
+						EmployeeId = o.Key.EmployeeId,
+						CompanyName = o.Key.CompanyName,
+						FirstName = o.Key.FirstName,
+						LastName = o.Key.LastName,
+						Phone = o.Key.Phone,
+						ShipperId = o.Key.ShipVia
+					}).ToArrayAsync();
 			}
 		}
 	}
