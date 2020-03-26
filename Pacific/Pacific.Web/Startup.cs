@@ -10,6 +10,7 @@ using Pacific.Core.Services.Subscriptions;
 using Pacific.Web.Models.Handlers;
 using Microsoft.Extensions.Hosting;
 using Pacific.Core.Services;
+using Pacific.Core.Services.Orm;
 
 namespace Pacific.Web
 {
@@ -31,7 +32,7 @@ namespace Pacific.Web
 			services.AddSingleton<IPushSubscriptionsService, PushSubscriptionsService>();
 			services.AddHttpClient<PushServiceClient>();
 			//services.AddHostedService<WeatherNotificationsProducer>();
-			services.AddHostedService<FileSystemVisitorNotificationProducer>();
+			//services.AddHostedService<FileSystemVisitorNotificationProducer>();
 
 			services.AddMvc(options => options.EnableEndpointRouting = false).SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_3_0);
 
@@ -45,7 +46,8 @@ namespace Pacific.Web
 																		.AllowAnyOrigin()
 																		.AllowAnyMethod()));
 
-			services.AddTransient<IHandler, GenericHandler>();
+			services.AddTransient<IHandlerAsync, GenericHandler>();
+			services.AddTransient<OrmService>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

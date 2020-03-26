@@ -1,10 +1,11 @@
 using Pacific.Web.Models.Requests;
 using Pacific.Web.Models.Responses;
+using System.Threading.Tasks;
 
 namespace Pacific.Web.Models.Handlers
 {
-    public interface IHandler
+    public interface IHandlerAsync
     {
-        IResponse Execute(IRequest request);
+        Task<IResponse> Execute(IRequest request);
     }
 }

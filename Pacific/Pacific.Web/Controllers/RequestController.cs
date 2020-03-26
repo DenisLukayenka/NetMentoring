@@ -1,6 +1,9 @@
+using System.Collections.Generic;
 using System.Net.Mime;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Pacific.ORM.Models;
 using Pacific.Web.Models.Handlers;
 using Pacific.Web.Models.Requests;
 using Pacific.Web.Models.Responses;
@@ -13,17 +16,23 @@ namespace Pacific.Web.Controllers
 	[Produces(MediaTypeNames.Application.Json)]
     public class RequestController
     {
-        private IHandler _handler;
+        private IHandlerAsync _handler;
 
-        public RequestController(IHandler handler)
+        public RequestController(IHandlerAsync handler)
         {
             this._handler = handler;
         }
 
         [HttpGet("GetSystemFiles")]
-		public SystemVisitorResponse Get([FromQuery] SystemVisitorRequest request)
+		public async Task<IResponse> Get([FromQuery] SystemVisitorRequest request)
 		{
-			return this._handler.Execute(request) as SystemVisitorResponse;
+			return await this._handler.Execute(request);
 		}
+
+        [HttpGet("GetProducts")]
+        public async Task<IResponse> Get([FromQuery] OrmRequest request)
+        {
+            return await this._handler.Execute(request);
+        }
     }
 }

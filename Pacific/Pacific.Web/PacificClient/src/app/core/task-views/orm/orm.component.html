@@ -1,0 +1,23 @@
+<pac-task-view [header]="header" [main]="main" [footer]="footer">
+    <ng-template #header>
+    </ng-template>
+    <ng-template #main>
+        <form [formGroup]="firstFormGroup">
+            <ng-template matStepLabel>Select the operation</ng-template>
+
+            <mat-form-field appearance="fill">
+                <mat-label>Select</mat-label>
+                <mat-select>
+                    <mat-option value="option">Option</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <div>
+            <button mat-button matStepperNext>Next</button>
+            </div>
+        </form>
+    </ng-template>
+    <ng-template #footer>
+        <mat-divider class="divider"></mat-divider>
+        <span>Items count: {{itemsCount}}</span>
+    </ng-template>
+</pac-task-view>
