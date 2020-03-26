@@ -1,20 +1,10 @@
 import { NgModule } from '@angular/core';
 import { MainContainer } from './main-container/main-container.component';
 import { CommonModule } from '@angular/common';
-import { MatExpansionModule } from '@angular/material/expansion';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatListModule } from '@angular/material/list';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ScrollingModule } from '@angular/cdk/scrolling';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatStepperModule } from '@angular/material/stepper';
-import { MatSelectModule } from '@angular/material/select';
 import { SharedModule } from '../shared/shared.module';
 import { SystemVisitorComponent } from './task-views/system-visitor/system-visitor.component';
 import { OrmComponent } from './task-views/orm/orm.component';
+import { MaterialModule } from '../material-ui/material.module';
 
 @NgModule({
     declarations: [
@@ -24,20 +14,8 @@ import { OrmComponent } from './task-views/orm/orm.component';
     ],
     imports: [
       CommonModule,
-
-      MatCheckboxModule,
-      ScrollingModule,
-      MatDividerModule,
-      MatButtonModule,
-      MatExpansionModule,
-      MatFormFieldModule,
-      MatInputModule, 
-      FormsModule, ReactiveFormsModule,
-      MatListModule,
-      MatStepperModule,
-      MatSelectModule,
-
       SharedModule,
+      MaterialModule,
     ],
     exports: [
         MainContainer,

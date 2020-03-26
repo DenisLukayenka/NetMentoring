@@ -1,7 +1,7 @@
 .inline-form {
     display: flex;
-    align-items: baseline;
-    justify-content: space-between;
+    align-items: flex-start;
+    justify-content: flex-start;
     width: 100%;
 }
 
@@ -19,5 +19,10 @@
 }
 
 .divider {
-    margin: 5px 0px;
+    margin: 10px 0px;
+}
+
+.fetch-button-wrapper {
+    margin: 0 10px;
+    display: inline-block;
 }

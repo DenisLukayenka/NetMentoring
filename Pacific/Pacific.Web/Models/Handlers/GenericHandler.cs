@@ -33,6 +33,9 @@ namespace Pacific.Web.Models.Handlers
 
                 case OrmRequest r:
                     return await this.Execute(r);
+
+                case AddEmployeeRequest e:
+                    return await this.Execute(e);
             }
 
             throw new ArgumentException("Request type is incorrect");
@@ -45,6 +48,14 @@ namespace Pacific.Web.Models.Handlers
             return new SystemVisitorResponse()
             {
                 Files = this._visitor.Explore().ToArray()
+            };
+        }
+
+        protected async Task<AddEmployeeStatusResponse> Execute(AddEmployeeRequest request)
+        {
+            return new AddEmployeeStatusResponse
+            {
+                IsSuccess = await this._ormService.AddEmployeeToDbAsync(this._mapper.Map<Employee>(request.Employee)) 
             };
         }
 

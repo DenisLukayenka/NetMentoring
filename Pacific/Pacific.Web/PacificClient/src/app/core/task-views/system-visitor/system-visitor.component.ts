@@ -25,7 +25,7 @@ export class SystemVisitorComponent implements AfterViewInit, OnInit {
 
     @ViewChild(CdkVirtualScrollViewport) viewport: CdkVirtualScrollViewport;
 
-    constructor(private fetcher: DataFetcher<any>) {}
+    constructor(private fetcher: DataFetcher) {}
 
     ngOnInit(): void {
         this.showFilteredDirectories = false;

@@ -71,5 +71,15 @@ namespace Pacific.Core.Services.Orm
 					}).ToArrayAsync();
 			}
 		}
+
+		public async Task<bool> AddEmployeeToDbAsync(Employee employee)
+		{
+			using (var db = new NothwindDbContext())
+			{
+				await db.InsertAsync(employee);
+			}
+
+			return true;
+		}
 	}
 }

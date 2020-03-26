@@ -16,6 +16,8 @@ namespace Pacific.Web.Mappings
 			CreateMap<Employee, EmployeeViewModel>()
 				.ForMember(dest => dest.ReportsToName, opt => opt.MapFrom(src => 
 					src.ReportsTo != null ? src.ReportsTo.FirstName : ""));
+
+			CreateMap<PostEmployeeViewModel, Employee>();
 		}
 	}
 }

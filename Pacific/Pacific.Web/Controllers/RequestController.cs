@@ -8,13 +8,14 @@ using Pacific.Web.Models;
 using Pacific.Web.Models.Handlers;
 using Pacific.Web.Models.Requests;
 using Pacific.Web.Models.Responses;
+using Pacific.Web.Models.TableModels;
 
 namespace Pacific.Web.Controllers
 {
     [ApiController]
     [Route("/api/request")]
-	[EnableCors("AllowAll")]
-	[Produces(MediaTypeNames.Application.Json)]
+    [EnableCors("AllowAll")]
+    [Produces(MediaTypeNames.Application.Json)]
     public class RequestController
     {
         private IHandlerAsync _handler;
@@ -25,15 +26,21 @@ namespace Pacific.Web.Controllers
         }
 
         [HttpGet("GetSystemFiles")]
-		public async Task<IResponse> Get([FromQuery] SystemVisitorRequest request)
-		{
-			return await this._handler.Execute(request);
-		}
+        public async Task<IResponse> Get([FromQuery] SystemVisitorRequest request)
+        {
+            return await this._handler.Execute(request);
+        }
 
         [HttpGet("FetchDataFromDb")]
         public async Task<IResponse> Get(OrmRequestType requestType)
         {
             return await this._handler.Execute(new OrmRequest { requestType = requestType });
+        }
+
+        [HttpPost("AddEmployee")]
+        public async Task<IResponse> Post([FromBody] AddEmployeeRequest request)
+        {
+            return await this._handler.Execute(request);
         }
     }
 }
