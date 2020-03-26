@@ -11,6 +11,10 @@ using Pacific.Web.Models.Handlers;
 using Microsoft.Extensions.Hosting;
 using Pacific.Core.Services;
 using Pacific.Core.Services.Orm;
+using LinqToDB.Data;
+using Pacific.ORM;
+using AutoMapper;
+using Pacific.Web.Mappings;
 
 namespace Pacific.Web
 {
@@ -26,13 +30,8 @@ namespace Pacific.Web
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-			//services.AddControllers();
-
-			services.Configure<PushNotificationsOptions>(Configuration.GetSection("PushNotifications"));
-			services.AddSingleton<IPushSubscriptionsService, PushSubscriptionsService>();
-			services.AddHttpClient<PushServiceClient>();
-			//services.AddHostedService<WeatherNotificationsProducer>();
-			//services.AddHostedService<FileSystemVisitorNotificationProducer>();
+			DataConnection.DefaultSettings = new DbSettings();
+			services.AddAutoMapper(typeof(Startup).Assembly);
 
 			services.AddMvc(options => options.EnableEndpointRouting = false).SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_3_0);
 

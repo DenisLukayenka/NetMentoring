@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Pacific.ORM.Models;
+using Pacific.Web.Models;
 using Pacific.Web.Models.Handlers;
 using Pacific.Web.Models.Requests;
 using Pacific.Web.Models.Responses;
@@ -29,10 +30,10 @@ namespace Pacific.Web.Controllers
 			return await this._handler.Execute(request);
 		}
 
-        [HttpGet("GetProducts")]
-        public async Task<IResponse> Get([FromQuery] OrmRequest request)
+        [HttpGet("FetchDataFromDb")]
+        public async Task<IResponse> Get(OrmRequestType requestType)
         {
-            return await this._handler.Execute(request);
+            return await this._handler.Execute(new OrmRequest { requestType = requestType });
         }
     }
 }

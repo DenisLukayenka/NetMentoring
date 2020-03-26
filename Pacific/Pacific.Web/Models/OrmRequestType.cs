@@ -2,6 +2,8 @@
 {
 	public enum OrmRequestType
 	{
-		SelectProductsWithCategoryAndSuppliers
+		SelectProductsWithCategoryAndSuppliers = 0,
+		SelectEmployees,
+		SelectRegionStatistic,
 	}
 }

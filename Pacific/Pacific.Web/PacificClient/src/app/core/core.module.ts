@@ -11,6 +11,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatStepperModule } from '@angular/material/stepper';
+import { MatSelectModule } from '@angular/material/select';
 import { SharedModule } from '../shared/shared.module';
 import { SystemVisitorComponent } from './task-views/system-visitor/system-visitor.component';
 import { OrmComponent } from './task-views/orm/orm.component';
@@ -34,6 +35,7 @@ import { OrmComponent } from './task-views/orm/orm.component';
       FormsModule, ReactiveFormsModule,
       MatListModule,
       MatStepperModule,
+      MatSelectModule,
 
       SharedModule,
     ],

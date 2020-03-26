@@ -1,0 +1,11 @@
+.inline-form {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.inline-form-item {
+    flex: auto;
+    margin: 5px;
+}

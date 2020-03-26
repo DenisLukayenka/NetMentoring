@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 namespace Pacific.Web.Models.Responses
 {
-	public class ProductsResponse: IResponse
+	public class EmployeesResponse: IResponse
 	{
-		public IEnumerable<ProductViewModel> Products { get; set; }
+		public IEnumerable<EmployeeViewModel> Employees { get; set; }
 	}
 }

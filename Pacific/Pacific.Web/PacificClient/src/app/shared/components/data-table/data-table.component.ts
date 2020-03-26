@@ -1,23 +1,47 @@
-import { Component, Input, ViewChild } from "@angular/core";
-import { DataTableType } from '../../Models/DataModels/DataTableType';
-import { MatTableDataSource } from '@angular/material/table';
+import { 
+    Component, 
+    Input, 
+    ChangeDetectionStrategy, 
+    OnChanges, 
+    SimpleChanges, 
+    ViewChild
+} from "@angular/core";
 import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+
 
 @Component({
     selector: 'pac-data-table',
     templateUrl: './data-table.component.html',
-    styleUrls: ['./data-table.component.scss']
+    styleUrls: ['./data-table.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DataTableComponent<T> {
-    @Input() dataType: DataTableType;
-    @Input() data: any;
+export class DataTableComponent implements OnChanges {
+    @Input() responseData: any[];
+    dataSource: MatTableDataSource<any>;
+    displayedColumns: string[];
 
-    displayedColumns: string[] = Object.keys({} as T);
-    dataSource: MatTableDataSource<T>;
+    @ViewChild(MatPaginator) paginator: MatPaginator;
+    @ViewChild(MatSort, {static: true}) sort: MatSort;
 
-    @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+    ngOnChanges(changes: SimpleChanges): void {
+        let currentValue = this.retrieveCurrentValue(changes);
 
-    ngOnInit() {
-        this.dataSource.paginator = this.paginator;
+        if (currentValue?.length > 0) {
+            this.dataSource = new MatTableDataSource(currentValue);
+            this.displayedColumns = Object.keys(currentValue[0]);
+            this.dataSource.paginator = this.paginator;
+            this.dataSource.sort = this.sort;
+        }
+    }
+
+    private retrieveCurrentValue(changes: SimpleChanges) {
+        if (!changes.responseData.currentValue) {
+            return null;
+        }
+        let keys = Object.keys(changes.responseData.currentValue);
+
+        return changes.responseData.currentValue[keys[0]];
     }
 }

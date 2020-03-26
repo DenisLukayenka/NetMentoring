@@ -8,7 +8,6 @@ namespace Pacific.ORM
 	{
 		public NothwindDbContext() : base("NorthwindDb") 
 		{
-			DataConnection.DefaultSettings = new DbSettings();
 		}
 
 		public ITable<Category> Categories => GetTable<Category>();
