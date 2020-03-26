@@ -20,6 +20,5 @@ export class OrmComponent {
     public fetchData() {
         this.dataSource$ = null;
         this.dataSource$ = this.fetcher.fetchDataFromDb(this.selected);
-        
     }
 }
