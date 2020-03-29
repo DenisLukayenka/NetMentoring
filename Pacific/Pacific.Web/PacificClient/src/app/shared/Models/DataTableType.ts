@@ -4,6 +4,7 @@ export enum DataTableType {
     RegionStat,
     EmployeeShippers,
     Categories,
+    NotShippedProducts,
 }
 
 export namespace DataTableType {

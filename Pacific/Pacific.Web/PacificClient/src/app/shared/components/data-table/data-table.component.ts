@@ -5,6 +5,7 @@ import {
     OnChanges, 
     SimpleChanges, 
     ViewChild,
+    OnInit,
 } from "@angular/core";
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -18,15 +19,21 @@ import { SelectionModel } from '@angular/cdk/collections';
     styleUrls: ['./data-table.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DataTableComponent implements OnChanges {
+export class DataTableComponent implements OnChanges, OnInit {
     @Input() responseData: any[];
     @Input() selectedRows: SelectionModel<any>;
+    @Input() allowMultiSelect: boolean = true;
+    @Input() initialSelection: any[] = [];
 
     public dataSource: MatTableDataSource<any>;
     public displayedColumns: string[];
 
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort, {static: true}) sort: MatSort;
+
+    ngOnInit() {
+        this.selectedRows = new SelectionModel<any>(this.allowMultiSelect, this.initialSelection);
+    }
 
     ngOnChanges(changes: SimpleChanges): void {
         let currentValue = this.retrieveCurrentValue(changes);

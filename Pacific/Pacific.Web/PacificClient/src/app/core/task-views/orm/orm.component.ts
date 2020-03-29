@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
 import { DataTableType } from 'src/app/shared/Models/DataTableType';
 import { DataFetcher } from 'src/app/shared/utilities/DataFetcher';
 import { Observable } from 'rxjs';
@@ -13,7 +13,7 @@ import { ProductDialogComponent } from 'src/app/shared/components/product-dialog
     templateUrl: './orm.component.html',
     styleUrls: ['./orm.component.scss'],
 })
-export class OrmComponent implements OnInit {
+export class OrmComponent {
     public DataTableType = DataTableType;
     public dataSource$: Observable<any[]>;
     public selectedSelector: DataTableType;
@@ -24,15 +24,11 @@ export class OrmComponent implements OnInit {
         this.selectedSelector = DataTableType.Products;
     }
 
-    public ngOnInit() {
-        this.resetSelection(true, []);
-    }
-
     public fetchData() {
         this.dataSource$ = null;
         this.dataSource$ = this.fetcher.fetchDataFromDb(this.selectedSelector);
         
-        this.resetSelection(true, []);
+        this.resetSelection(this.allowMultiSelect, []);
     }
 
     public openEmployeeDialog() {
@@ -54,7 +50,7 @@ export class OrmComponent implements OnInit {
     }
 
     public isChangeCategoryEnabled(): boolean {
-        return this.selectedSelector === DataTableType.Products && this.selection.selected.length > 0;
+        return this.selectedSelector === DataTableType.Products && this.selection?.selected.length > 0;
     }
 
     private resetSelection(allowMultiSelect: boolean, initialSelection: []) {
@@ -62,7 +58,10 @@ export class OrmComponent implements OnInit {
     }
 
     public openProductsDialog() {
-        const dialogRef = this.dialog.open(ProductDialogComponent);
+        this.dialog.open(ProductDialogComponent);
+    }
 
+    public get allowMultiSelect() {
+        return this.selectedSelector !== DataTableType.NotShippedProducts;
     }
 }

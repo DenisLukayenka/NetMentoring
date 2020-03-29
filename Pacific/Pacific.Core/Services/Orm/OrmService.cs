@@ -134,5 +134,21 @@ namespace Pacific.Core.Services.Orm
 
 			return true;
 		}
+
+		public async Task<IEnumerable<Product>> SelectNotShippedProducts()
+		{
+			using (var db = new NothwindDbContext())
+			{
+				var a = await db.OrderDetails
+					.LoadWith(od => od.Order)
+					.LoadWith(od => od.Product.Category)
+					.LoadWith(od => od.Product.Supplier)
+					.ToArrayAsync();
+
+				var b = a.Where(od => od.Order.ShippedDate == null);
+
+				return b.Select(od => od.Product);
+			}
+		}
 	}
 }

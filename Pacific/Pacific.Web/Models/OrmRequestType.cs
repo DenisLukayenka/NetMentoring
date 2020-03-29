@@ -7,5 +7,6 @@
 		SelectRegionStatistic,
 		SelectEmployeeShippers,
 		SelectCategories,
+		NotShippedProducts,
 	}
 }

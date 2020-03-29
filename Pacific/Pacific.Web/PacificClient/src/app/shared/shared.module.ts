@@ -7,6 +7,7 @@ import { EmployeeDialogComponent } from './components/employee-dialog/employee-d
 import { MaterialModule } from '../material-ui/material.module';
 import { ChooseCategoryDialog } from './components/choose-category-dialog/choose-category-dialog.component';
 import { ProductDialogComponent } from './components/product-dialog/product-dialog.component';
+import { UnshippedProductDialogComponent } from './components/unshipped-product-dialog/unshipped-product-dialog.component';
 
 @NgModule({
     declarations: [
@@ -14,6 +15,7 @@ import { ProductDialogComponent } from './components/product-dialog/product-dial
       EmployeeDialogComponent,
       ChooseCategoryDialog,
       ProductDialogComponent,
+      UnshippedProductDialogComponent,
     ],
     imports: [
       CommonModule,
@@ -24,6 +26,7 @@ import { ProductDialogComponent } from './components/product-dialog/product-dial
       EmployeeDialogComponent,
       ChooseCategoryDialog,
       ProductDialogComponent,
+      UnshippedProductDialogComponent,
     ],
     exports: [
         TaskViewComponent,
@@ -31,6 +34,7 @@ import { ProductDialogComponent } from './components/product-dialog/product-dial
         EmployeeDialogComponent,
         ChooseCategoryDialog,
         ProductDialogComponent,
+        UnshippedProductDialogComponent,
     ]
   })
   export class SharedModule { }

@@ -113,6 +113,12 @@ namespace Pacific.Web.Models.Handlers
                         Categories = this._mapper.Map<IEnumerable<CategoryTableView>>(
                             await this._ormService.FetchAllCategoriesAsync())
                     };
+                case OrmRequestType.NotShippedProducts:
+                    return new ProductsResponse
+                    {
+                        Products = this._mapper.Map<IEnumerable<ProductTableView>>(
+                            await this._ormService.SelectNotShippedProducts())
+                    };
             }
 
             throw new ArgumentException("Request type is incorrect");
