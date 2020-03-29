@@ -50,7 +50,19 @@ namespace Pacific.Web.Controllers
         }
 
         [HttpPost("AddProductsCollection")]
-        public async Task<IResponse> Post([FromBody]  AddProductsRequest request)
+        public async Task<IResponse> Post([FromBody] AddProductsRequest request)
+        {
+            return await this._handler.Execute(request);
+        }
+
+        [HttpPost("GetSimilarProducts")]
+        public async Task<IResponse> Post([FromBody] SimilarProductsRequest request) 
+        {
+            return await this._handler.Execute(request);
+        }
+
+        [HttpPost("ReplaceProduct")]
+        public async Task<IResponse> Post([FromBody] ReplaceProductRequest request)
         {
             return await this._handler.Execute(request);
         }

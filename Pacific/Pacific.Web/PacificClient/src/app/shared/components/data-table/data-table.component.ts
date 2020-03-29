@@ -19,8 +19,8 @@ import { SelectionModel } from '@angular/cdk/collections';
     styleUrls: ['./data-table.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DataTableComponent implements OnChanges, OnInit {
-    @Input() responseData: any[];
+export class DataTableComponent implements OnChanges {
+    @Input() responseData: any[] = [];
     @Input() selectedRows: SelectionModel<any>;
     @Input() allowMultiSelect: boolean = true;
     @Input() initialSelection: any[] = [];
@@ -30,10 +30,6 @@ export class DataTableComponent implements OnChanges, OnInit {
 
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort, {static: true}) sort: MatSort;
-
-    ngOnInit() {
-        this.selectedRows = new SelectionModel<any>(this.allowMultiSelect, this.initialSelection);
-    }
 
     ngOnChanges(changes: SimpleChanges): void {
         let currentValue = this.retrieveCurrentValue(changes);

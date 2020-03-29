@@ -42,6 +42,11 @@ namespace Pacific.Web.Models.Handlers
 
                 case AddProductsRequest r:
                     return await this.Execute(r);
+
+                case SimilarProductsRequest r:
+                    return await this.Execute(r);
+                case ReplaceProductRequest r:
+                    return await this.Execute(r);
             }
 
             throw new ArgumentException("Request type is incorrect");
@@ -81,6 +86,24 @@ namespace Pacific.Web.Models.Handlers
             };
         }
 
+        protected async Task<ProductsResponse> Execute(SimilarProductsRequest request)
+        {
+            return new ProductsResponse
+            {
+                Products = this._mapper.Map<IEnumerable<ProductTableView>>(
+                    await this._ormService.SelectSimililarProducts(request.ProductId))
+            };
+        }
+
+        protected async Task<StatusResponse> Execute(ReplaceProductRequest request)
+        {
+            return new StatusResponse
+            {
+                IsSuccess = await this._ormService
+                    .ReplaceProductInOrder(request.OriginProductId, request.OriginOrderId, request.TargetProductId)
+            };
+        }
+
         protected async Task<IResponse> Execute(OrmRequest request)
         {
             switch (request.requestType)
@@ -114,10 +137,10 @@ namespace Pacific.Web.Models.Handlers
                             await this._ormService.FetchAllCategoriesAsync())
                     };
                 case OrmRequestType.NotShippedProducts:
-                    return new ProductsResponse
+                    return new NotShippedOrdersResponse
                     {
-                        Products = this._mapper.Map<IEnumerable<ProductTableView>>(
-                            await this._ormService.SelectNotShippedProducts())
+                        NotShippedOrders = this._mapper.Map<IEnumerable<NotShippedOrders>>(
+                            await this._ormService.SelectNotShippedOrders())
                     };
             }
 

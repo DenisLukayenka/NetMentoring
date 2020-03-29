@@ -10,6 +10,9 @@ import { AddEmployeeRequest } from '../Models/Requests/AddEmployeeRequest';
 import { ProductsMoveRequest } from '../Models/Requests/ProductsMoveRequest';
 import { Product } from '../Models/Product';
 import { AddProductsRequest } from '../Models/Requests/AddProductsRequest';
+import { ProductViewModel } from '../Models/ProductViewModel';
+import { SimilarProductRequest } from '../Models/Requests/SimilarProductRequest';
+import { ReplaceProductRequest } from '../Models/Requests/ReplaceProductRequest';
 
 @Injectable({
     providedIn: 'root',
@@ -61,5 +64,25 @@ export class DataFetcher {
         } as AddProductsRequest;
 
         return this.http.post<StatusResponse>(ROOT_URL + '/request/AddProductsCollection', request, { headers });
+    }
+
+    getSimilarProduct(productId: number): Observable<ProductViewModel[]> {
+        const headers = new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8').set('Accept', '*/*');
+        var request = {
+            ProductId: productId,
+        } as SimilarProductRequest;
+
+        return this.http.post<ProductViewModel[]>(ROOT_URL + '/request/GetSimilarProducts', request, { headers });
+    }
+
+    replaceProduct(originProductId: number, originOrderId: number, targetProductId: number) {
+        const headers = new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8').set('Accept', '*/*');
+        var request = {
+            OriginOrderId: originOrderId,
+            OriginProductId: originProductId,
+            TargetProductId: targetProductId,
+        } as ReplaceProductRequest;
+
+        return this.http.post<StatusResponse>(ROOT_URL + '/request/ReplaceProduct', request, { headers });
     }
 }

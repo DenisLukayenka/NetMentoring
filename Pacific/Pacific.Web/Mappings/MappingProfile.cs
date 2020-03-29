@@ -25,6 +25,11 @@ namespace Pacific.Web.Mappings
 			CreateMap<ProductViewModel, Product>()
 				.ForMember(dest => dest.Supplier, opt => opt.MapFrom(src => new Supplier { CompanyName = src.SupplierName }))
 				.ForMember(dest => dest.Category, opt => opt.MapFrom(src => new Category { Name = src.CategoryName }));
+
+			CreateMap<OrderDetail, NotShippedOrders>()
+				.ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Product.Category.Name))
+				.ForMember(dest => dest.SupplierName, opt => opt.MapFrom(src => src.Product.Supplier.CompanyName))
+				.ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Product.Name));
 		}
 	}
 }

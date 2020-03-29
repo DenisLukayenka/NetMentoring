@@ -1,0 +1,15 @@
+.default-dialog {
+    width: 650px;
+    height: 600px;
+}
+
+.centered-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.flex-container {
+    display: flex;
+    flex-direction: row;
+}

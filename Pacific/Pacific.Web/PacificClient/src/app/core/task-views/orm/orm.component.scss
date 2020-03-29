@@ -24,5 +24,10 @@
 
 .fetch-button-wrapper {
     margin: 0 10px;
-    display: inline-block;
+    display: flex;
+    align-items: center;
+}
+
+.form-element {
+    margin: 3px 5px;
 }

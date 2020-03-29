@@ -135,19 +135,41 @@ namespace Pacific.Core.Services.Orm
 			return true;
 		}
 
-		public async Task<IEnumerable<Product>> SelectNotShippedProducts()
+		public async Task<IEnumerable<OrderDetail>> SelectNotShippedOrders()
 		{
 			using (var db = new NothwindDbContext())
 			{
-				var a = await db.OrderDetails
+				return await db.OrderDetails
 					.LoadWith(od => od.Order)
 					.LoadWith(od => od.Product.Category)
 					.LoadWith(od => od.Product.Supplier)
+					.Where(od => od.Order.ShippedDate == null)
 					.ToArrayAsync();
+			}
+		}
 
-				var b = a.Where(od => od.Order.ShippedDate == null);
+		public async Task<IEnumerable<Product>> SelectSimililarProducts(int productId)
+		{
+			using (var db = new NothwindDbContext())
+			{
+				var category = await db.Categories
+					.LoadWith(c => c.Products)
+					.FirstOrDefaultAsync(c => c.Products.FirstOrDefault(p => p.Id == productId) != null);
 
-				return b.Select(od => od.Product);
+				return category.Products;
+			}
+		}
+
+		public async Task<bool> ReplaceProductInOrder(int originProductId, int originOrderId, int productId)
+		{
+			using (var db = new NothwindDbContext())
+			{
+				var recordsUpdated = await db.OrderDetails
+					.Where(od => od.OrderId == originOrderId && od.ProductId == originProductId)
+					.Set(od => od.ProductId, productId)
+					.UpdateAsync();
+
+				return recordsUpdated == 1;
 			}
 		}
 	}

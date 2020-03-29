@@ -54,7 +54,7 @@ export class ProductDialogComponent implements OnInit {
         this.isLoading = true;
 
         this.fetcher.addProducts(this.products).subscribe(result => {
-            if (result) {
+            if (result.isSuccess) {
                 this.isLoading = false;
                 this.dialogRef.close();
             } else {

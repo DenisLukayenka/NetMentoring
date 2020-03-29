@@ -9,8 +9,23 @@
             </mat-form-field>
 
             <div class="fetch-button-wrapper">
-                <button mat-fab color="accent" (click)="fetchData()">Fetch</button>
-                <button mat-flat-button color="warn" (click)="changeCategory()" [disabled]="!isChangeCategoryEnabled()">Change category</button>
+                <button mat-fab color="accent" class="form-element" (click)="fetchData()">Fetch</button>
+                <button 
+                    class="form-element"
+                    mat-flat-button 
+                    color="warn" 
+                    (click)="changeCategory()" 
+                    [disabled]="!isChangeCategoryEnabled"
+                >Change category</button >
+                    
+                <button 
+                    class="form-element"
+                    mat-flat-button
+                    color="warn"
+                    (click)="replaceProduct()"
+                    [disabled]="!isReplaceProductEnabled"
+                >Replace product</button>
+                <mat-spinner *ngIf="isLoading" diameter="30"></mat-spinner>
             </div>
         </form>
     </ng-template>
@@ -26,7 +41,6 @@
         <div class="btn-group" role="group" aria-label="Operation with db">
             <button type="button" class="btn btn-secondary" (click)='openEmployeeDialog()'>Add employee</button>
             <button type="button" class="btn btn-secondary" (click)='openProductsDialog()'>Add products</button>
-            <button type="button" class="btn btn-secondary">ReplaceProducts</button>
         </div>
     </ng-template>
 </pac-task-view>
