@@ -5,6 +5,6 @@ namespace Pacific.Web.Models.Responses
 {
 	public class ProductsResponse: IResponse
 	{
-		public IEnumerable<ProductViewModel> Products { get; set; }
+		public IEnumerable<ProductTableView> Products { get; set; }
 	}
 }

@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { EmployeeDialogComponent } from 'src/app/shared/components/employee-dialog/employee-dialog.component';
 import { SelectionModel } from '@angular/cdk/collections';
 import { ChooseCategoryDialog } from 'src/app/shared/components/choose-category-dialog/choose-category-dialog.component';
+import { ProductDialogComponent } from 'src/app/shared/components/product-dialog/product-dialog.component';
 
 @Component({
     selector: 'pac-orm',
@@ -58,5 +59,10 @@ export class OrmComponent implements OnInit {
 
     private resetSelection(allowMultiSelect: boolean, initialSelection: []) {
         this.selection = new SelectionModel<any>(allowMultiSelect, initialSelection);
+    }
+
+    public openProductsDialog() {
+        const dialogRef = this.dialog.open(ProductDialogComponent);
+
     }
 }

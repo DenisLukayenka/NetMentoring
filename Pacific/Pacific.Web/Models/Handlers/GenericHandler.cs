@@ -39,6 +39,9 @@ namespace Pacific.Web.Models.Handlers
 
                 case ProductsMoveToCategoryRequest r:
                     return await this.Execute(r);
+
+                case AddProductsRequest r:
+                    return await this.Execute(r);
             }
 
             throw new ArgumentException("Request type is incorrect");
@@ -66,7 +69,15 @@ namespace Pacific.Web.Models.Handlers
         {
             return new StatusResponse
             {
-                IsSuccess = await this._ormService.MoveProductsToCategory(request.ProductsIds, request.CategoryId)
+                IsSuccess = await this._ormService.MoveProductsToCategoryAsync(request.ProductsIds, request.CategoryId)
+            };
+        }
+
+        protected async Task<StatusResponse> Execute(AddProductsRequest request)
+        {
+            return new StatusResponse
+            {
+                IsSuccess = await this._ormService.AddProductsAsync(this._mapper.Map<IEnumerable<Product>>(request.Products))
             };
         }
 
@@ -77,13 +88,13 @@ namespace Pacific.Web.Models.Handlers
                 case OrmRequestType.SelectProductsWithCategoryAndSuppliers:
                     return new ProductsResponse
                     {
-                        Products = this._mapper.Map<IEnumerable<ProductViewModel>>(
+                        Products = this._mapper.Map<IEnumerable<ProductTableView>>(
                             await this._ormService.SelectProductsAsync())
                     };
                 case OrmRequestType.SelectEmployees:
                     return new EmployeesResponse 
                     { 
-                        Employees = this._mapper.Map<IEnumerable<EmployeeViewModel>>(
+                        Employees = this._mapper.Map<IEnumerable<EmployeeTableView>>(
                             await this._ormService.SelectEmployeesAsync())
                     };
                 case OrmRequestType.SelectRegionStatistic:
@@ -99,7 +110,7 @@ namespace Pacific.Web.Models.Handlers
                 case OrmRequestType.SelectCategories:
                     return new ListCategoriesResponse
                     {
-                        Categories = this._mapper.Map<IEnumerable<CategoryViewModel>>(
+                        Categories = this._mapper.Map<IEnumerable<CategoryTableView>>(
                             await this._ormService.FetchAllCategoriesAsync())
                     };
             }

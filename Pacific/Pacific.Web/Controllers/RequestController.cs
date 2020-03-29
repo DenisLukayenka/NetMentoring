@@ -48,5 +48,11 @@ namespace Pacific.Web.Controllers
         {
             return await this._handler.Execute(request);
         }
+
+        [HttpPost("AddProductsCollection")]
+        public async Task<IResponse> Post([FromBody]  AddProductsRequest request)
+        {
+            return await this._handler.Execute(request);
+        }
     }
 }

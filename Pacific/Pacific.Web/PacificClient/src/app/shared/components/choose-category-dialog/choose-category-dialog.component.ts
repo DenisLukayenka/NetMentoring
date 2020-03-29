@@ -3,7 +3,6 @@ import { DataFetcher } from '../../utilities/DataFetcher';
 import { DataTableType } from '../../Models/DataTableType';
 import { CategoryViewModel } from '../../Models/CategoryViewModel';
 import { ListCategoryResponse } from '../../Models/Responses/ListCategoriesResponse';
-import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
     selector: 'pac-choose-category-dialog',
@@ -14,7 +13,7 @@ export class ChooseCategoryDialog {
     public categories: CategoryViewModel[];
     public targetCategoryId: number;
 
-    constructor(private fetcher: DataFetcher, public dialogRef: MatDialogRef<ChooseCategoryDialog>) {
+    constructor(private fetcher: DataFetcher) {
         this.fetcher.fetchDataFromDb(DataTableType.Categories).subscribe((data: ListCategoryResponse) => {
             this.categories = data.categories;
 

@@ -1,6 +1,6 @@
 ﻿namespace Pacific.Web.Models.TableModels
 {
-	public class EmployeeViewModel
+	public class EmployeeTableView
 	{
 		public int Id { get; set; }
 

@@ -5,6 +5,6 @@ namespace Pacific.Web.Models.Responses
 {
 	public class ListCategoriesResponse: IResponse
 	{
-		public IEnumerable<CategoryViewModel> Categories { get; set; }
+		public IEnumerable<CategoryTableView> Categories { get; set; }
 	}
 }

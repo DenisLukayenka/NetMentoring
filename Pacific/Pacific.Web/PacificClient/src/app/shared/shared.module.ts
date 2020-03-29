@@ -6,12 +6,14 @@ import { DataTableComponent } from './components/data-table/data-table.component
 import { EmployeeDialogComponent } from './components/employee-dialog/employee-dialog.component';
 import { MaterialModule } from '../material-ui/material.module';
 import { ChooseCategoryDialog } from './components/choose-category-dialog/choose-category-dialog.component';
+import { ProductDialogComponent } from './components/product-dialog/product-dialog.component';
 
 @NgModule({
     declarations: [
       DataTableComponent,
       EmployeeDialogComponent,
       ChooseCategoryDialog,
+      ProductDialogComponent,
     ],
     imports: [
       CommonModule,
@@ -21,12 +23,14 @@ import { ChooseCategoryDialog } from './components/choose-category-dialog/choose
     entryComponents: [
       EmployeeDialogComponent,
       ChooseCategoryDialog,
+      ProductDialogComponent,
     ],
     exports: [
         TaskViewComponent,
         DataTableComponent,
         EmployeeDialogComponent,
         ChooseCategoryDialog,
+        ProductDialogComponent,
     ]
   })
   export class SharedModule { }

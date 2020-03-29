@@ -1,6 +1,6 @@
 ﻿namespace Pacific.Web.Models.TableModels
 {
-	public class ProductViewModel
+	public class ProductTableView
 	{
 		public int Id { get; set; }
 

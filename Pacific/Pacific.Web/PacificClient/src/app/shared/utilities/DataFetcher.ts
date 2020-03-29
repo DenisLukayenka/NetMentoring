@@ -8,6 +8,8 @@ import { DataTableType } from '../Models/DataTableType';
 import { StatusResponse } from '../Models/Responses/AddEmployeeStatusResponse';
 import { AddEmployeeRequest } from '../Models/Requests/AddEmployeeRequest';
 import { ProductsMoveRequest } from '../Models/Requests/ProductsMoveRequest';
+import { Product } from '../Models/Product';
+import { AddProductsRequest } from '../Models/Requests/AddProductsRequest';
 
 @Injectable({
     providedIn: 'root',
@@ -50,5 +52,14 @@ export class DataFetcher {
         } as ProductsMoveRequest;
 
         return this.http.post<StatusResponse>(ROOT_URL + '/request/MoveProductsToCategory', request, { headers });
+    }
+
+    addProducts(products: Product[]): Observable<StatusResponse> {
+        const headers = new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8').set('Accept', '*/*');
+        var request = {
+            Products: products,
+        } as AddProductsRequest;
+
+        return this.http.post<StatusResponse>(ROOT_URL + '/request/AddProductsCollection', request, { headers });
     }
 }

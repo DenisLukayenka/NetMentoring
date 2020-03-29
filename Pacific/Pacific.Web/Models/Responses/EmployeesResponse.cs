@@ -5,6 +5,6 @@ namespace Pacific.Web.Models.Responses
 {
 	public class EmployeesResponse: IResponse
 	{
-		public IEnumerable<EmployeeViewModel> Employees { get; set; }
+		public IEnumerable<EmployeeTableView> Employees { get; set; }
 	}
 }
