@@ -5,7 +5,6 @@ import {
     OnChanges, 
     SimpleChanges, 
     ViewChild,
-    OnInit
 } from "@angular/core";
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -19,21 +18,15 @@ import { SelectionModel } from '@angular/cdk/collections';
     styleUrls: ['./data-table.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DataTableComponent implements OnChanges, OnInit {
+export class DataTableComponent implements OnChanges {
     @Input() responseData: any[];
-    dataSource: MatTableDataSource<any>;
-    displayedColumns: string[];
+    @Input() selectedRows: SelectionModel<any>;
 
-    selection: SelectionModel<any>;
+    public dataSource: MatTableDataSource<any>;
+    public displayedColumns: string[];
 
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort, {static: true}) sort: MatSort;
-
-    ngOnInit() {
-        const initialSelection = [];
-        const allowMultiSelect = true;
-        this.selection = new SelectionModel<any>(allowMultiSelect, initialSelection);
-    }
 
     ngOnChanges(changes: SimpleChanges): void {
         let currentValue = this.retrieveCurrentValue(changes);
@@ -44,12 +37,11 @@ export class DataTableComponent implements OnChanges, OnInit {
 
             this.dataSource.paginator = this.paginator;
             this.dataSource.sort = this.sort;
-            this.selection = new SelectionModel<any>(true, []);
         }
     }
 
     private retrieveCurrentValue(changes: SimpleChanges) {
-        if (!changes.responseData.currentValue) {
+        if (!changes.responseData?.currentValue) {
             return null;
         }
         let keys = Object.keys(changes.responseData.currentValue);
@@ -59,7 +51,7 @@ export class DataTableComponent implements OnChanges, OnInit {
 
     /** Whether the number of selected elements matches the total number of rows. */
     isAllSelected() {
-        const numSelected = this.selection.selected.length;
+        const numSelected = this.selectedRows.selected.length;
         const numRows = this.dataSource.data.length;
         return numSelected == numRows;
     }
@@ -67,7 +59,7 @@ export class DataTableComponent implements OnChanges, OnInit {
     /** Selects all rows if they are not all selected; otherwise clear selection. */
     masterToggle() {
         this.isAllSelected() ?
-            this.selection.clear() :
-            this.dataSource.data.forEach(row => this.selection.select(row));
+            this.selectedRows.clear() :
+            this.dataSource.data.forEach(row => this.selectedRows.select(row));
     }
 }

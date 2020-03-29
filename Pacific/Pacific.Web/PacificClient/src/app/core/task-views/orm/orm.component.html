@@ -3,19 +3,21 @@
         <form class="inline-form">
             <mat-form-field appearance="fill">
                 <mat-label>Select</mat-label>
-                <mat-select [(value)]="selected">
+                <mat-select [(value)]="selectedSelector">
                     <mat-option *ngFor="let selector of DataTableType.values()" [value]="DataTableType[selector]">{{selector}}</mat-option>
                 </mat-select>
             </mat-form-field>
 
             <div class="fetch-button-wrapper">
                 <button mat-fab color="accent" (click)="fetchData()">Fetch</button>
+                <button mat-flat-button color="warn" (click)="changeCategory()" [disabled]="!isChangeCategoryEnabled()">Change category</button>
             </div>
         </form>
     </ng-template>
     <ng-template #main>
         <pac-data-table
             [responseData]="dataSource$ | async"
+            [selectedRows]="selection"
         ></pac-data-table>
     </ng-template>
     <ng-template #footer>
@@ -23,7 +25,6 @@
 
         <div class="btn-group" role="group" aria-label="Operation with db">
             <button type="button" class="btn btn-secondary" (click)='openEmployeeDialog()'>Add employee</button>
-            <button type="button" class="btn btn-secondary">Move products</button>
             <button type="button" class="btn btn-secondary">Add products</button>
             <button type="button" class="btn btn-secondary">ReplaceProducts</button>
         </div>

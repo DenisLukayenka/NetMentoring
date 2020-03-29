@@ -6,5 +6,6 @@
 		SelectEmployees,
 		SelectRegionStatistic,
 		SelectEmployeeShippers,
+		SelectCategories,
 	}
 }

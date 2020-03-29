@@ -32,13 +32,19 @@ namespace Pacific.Web.Controllers
         }
 
         [HttpGet("FetchDataFromDb")]
-        public async Task<IResponse> Get(OrmRequestType requestType)
+        public async Task<IResponse> Get([FromQuery] OrmRequestType requestType)
         {
             return await this._handler.Execute(new OrmRequest { requestType = requestType });
         }
 
         [HttpPost("AddEmployee")]
         public async Task<IResponse> Post([FromBody] AddEmployeeRequest request)
+        {
+            return await this._handler.Execute(request);
+        }
+
+        [HttpPost("MoveProductsToCategory")]
+        public async Task<IResponse> Post([FromBody] ProductsMoveToCategoryRequest request)
         {
             return await this._handler.Execute(request);
         }

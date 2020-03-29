@@ -1,8 +1,9 @@
 export enum DataTableType {
-    Products,
+    Products = 0,
     Employees,
     RegionStat,
     EmployeeShippers,
+    Categories,
 }
 
 export namespace DataTableType {

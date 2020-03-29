@@ -36,6 +36,9 @@ namespace Pacific.Web.Models.Handlers
 
                 case AddEmployeeRequest e:
                     return await this.Execute(e);
+
+                case ProductsMoveToCategoryRequest r:
+                    return await this.Execute(r);
             }
 
             throw new ArgumentException("Request type is incorrect");
@@ -51,11 +54,19 @@ namespace Pacific.Web.Models.Handlers
             };
         }
 
-        protected async Task<AddEmployeeStatusResponse> Execute(AddEmployeeRequest request)
+        protected async Task<StatusResponse> Execute(AddEmployeeRequest request)
         {
-            return new AddEmployeeStatusResponse
+            return new StatusResponse
             {
                 IsSuccess = await this._ormService.AddEmployeeToDbAsync(this._mapper.Map<Employee>(request.Employee)) 
+            };
+        }
+
+        protected async Task<StatusResponse> Execute(ProductsMoveToCategoryRequest request)
+        {
+            return new StatusResponse
+            {
+                IsSuccess = await this._ormService.MoveProductsToCategory(request.ProductsIds, request.CategoryId)
             };
         }
 
@@ -84,6 +95,12 @@ namespace Pacific.Web.Models.Handlers
                     return new EmployeeShipperResponse
                     {
                         EmployeeShippers = await this._ormService.SelectEmployeeShippersAsync()
+                    };
+                case OrmRequestType.SelectCategories:
+                    return new ListCategoriesResponse
+                    {
+                        Categories = this._mapper.Map<IEnumerable<CategoryViewModel>>(
+                            await this._ormService.FetchAllCategoriesAsync())
                     };
             }
 

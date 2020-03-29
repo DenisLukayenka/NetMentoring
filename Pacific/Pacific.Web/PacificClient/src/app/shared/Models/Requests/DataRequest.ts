@@ -1,6 +1,6 @@
-import { DataTableType } from '../DataModels/DataTableType';
 import { IRequest } from './IRequest';
+import { DataTableType } from '../DataTableType';
 
 export class DataTypeRequest implements IRequest {
-    public OrmRequestType: DataTableType;
+    public requestType: DataTableType;
 }

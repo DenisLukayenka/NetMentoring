@@ -18,6 +18,8 @@ namespace Pacific.Web.Mappings
 					src.ReportsTo != null ? src.ReportsTo.FirstName : ""));
 
 			CreateMap<PostEmployeeViewModel, Employee>();
+
+			CreateMap<Category, CategoryViewModel>();
 		}
 	}
 }

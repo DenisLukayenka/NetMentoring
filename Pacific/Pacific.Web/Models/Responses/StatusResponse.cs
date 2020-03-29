@@ -1,6 +1,6 @@
 ﻿namespace Pacific.Web.Models.Responses
 {
-	public class AddEmployeeStatusResponse: IResponse
+	public class StatusResponse: IResponse
 	{
 		public bool IsSuccess { get; set; } = false;
 	}

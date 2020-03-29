@@ -74,9 +74,29 @@ namespace Pacific.Core.Services.Orm
 
 		public async Task<bool> AddEmployeeToDbAsync(Employee employee)
 		{
+			int? records;
 			using (var db = new NothwindDbContext())
 			{
-				await db.InsertAsync(employee);
+				records = await db.InsertAsync(employee);
+			}
+
+			
+			return records != null;
+		}
+
+		public async Task<IEnumerable<Category>> FetchAllCategoriesAsync()
+		{
+			using (var db = new NothwindDbContext())
+			{
+				return await db.Categories.ToArrayAsync();
+			}
+		}
+
+		public async Task<bool> MoveProductsToCategory(IEnumerable<int> productsIds, int targetCategoryId)
+		{
+			using (var db = new NothwindDbContext())
+			{
+				db.Products.Where(p => productsIds.Contains(p.Id)).Set(p => p.CategoryId, targetCategoryId).Update();
 			}
 
 			return true;
