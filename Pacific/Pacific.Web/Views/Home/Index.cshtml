@@ -1,8 +1,43 @@
-﻿@{
+﻿@using Pacific.Core.Services
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+    <div class="accordion" id="accordionContainer">
+        @* FileSystemVisitor *@
+        <div class="card">
+            <div class="card-header" id="heading-visitor">
+                <h2 class="mb-0">
+                    <button class="btn btn-block btn-no-outline" type="button" data-toggle="collapse" data-target="#file-system-visitor" aria-expanded="true" aria-controls="file-system-visitor">
+                        FileSystemVisitor
+                    </button>
+                </h2>
+            </div>
+            <div id="file-system-visitor" class="collapse show" aria-labelledby="heading-visitor" data-parent="#accordionContainer">
+                <div class="card-body">
+                    <partial name="~/Views/Shared/_FileSystemVisitor.cshtml" />
+                </div>
+            </div>
+        </div>
+
+
+        @* Future tasks *@
+        <div class="card">
+            <div class="card-header" id="heading-future">
+                <h2 class="mb-0">
+                    <button class="btn btn-block btn-no-outline" type="button" data-toggle="collapse" data-target="#future-task" aria-expanded="false" aria-controls="future-task">
+                        Future tasks
+                    </button>
+                </h2>
+            </div>
+            <div id="future-task" class="collapse" aria-labelledby="heading-future" data-parent="#accordionContainer">
+                <div class="card-body">
+                    <p>future data</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

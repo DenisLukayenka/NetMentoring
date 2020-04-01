@@ -1,0 +1,15 @@
+﻿@model SelectedFolderViewModel
+
+@using(Html.BeginForm("SelectFolder", "FileSystemVisitor", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+	@Html.AntiForgeryToken()
+
+	<div class="form-horizontal">
+		<div class="form-group">
+			@Html.TextBoxFor(model => model.FolderPath, "", new { @type = "text" })
+		</div>
+		<div class="form-group">
+			<input type="submit" value="Select" class="btn btn-primary"/>
+		</div>
+	</div>
+}

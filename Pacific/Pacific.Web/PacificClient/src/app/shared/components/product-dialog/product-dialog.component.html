@@ -1,0 +1,62 @@
+<h2 mat-dialog-title>Add products</h2>
+<mat-dialog-content>
+  <form [formGroup]="productsForm" class="default-form">
+    <mat-form-field class="control" appearance="outline">
+      <mat-label>Product name:</mat-label>
+      <input matInput id="Name" formControlName="Name">
+    </mat-form-field>
+    <div class="break"></div>
+
+    <mat-form-field class="control" appearance="outline">
+      <mat-label>Supplier name:</mat-label>
+      <input matInput id="SupplierName" formControlName="SupplierName">
+    </mat-form-field>
+
+    <mat-form-field class="control" appearance="outline">
+      <mat-label>Category name</mat-label>
+      <input matInput id="CategoryName" formControlName="CategoryName">
+    </mat-form-field>
+    <div class="break"></div>
+
+    <mat-form-field class="control" appearance="outline">
+      <mat-label>Quantity Per Unit</mat-label>
+      <input matInput id="QuantityPerUnit" formControlName="QuantityPerUnit">
+    </mat-form-field>
+
+    <mat-form-field class="control" appearance="outline">
+      <mat-label>Unit Price</mat-label>
+      <input matInput id="UnitPrice" formControlName="UnitPrice">
+    </mat-form-field>
+
+    <mat-form-field class="control" appearance="outline">
+      <mat-label>Units In Stock</mat-label>
+      <input matInput id="UnitsInStock" formControlName="UnitsInStock">
+    </mat-form-field>
+    <div class="break"></div>
+
+    <mat-form-field class="control" appearance="outline">
+      <mat-label>Units On Order</mat-label>
+      <input matInput id="UnitsOnOrder" formControlName="UnitsOnOrder">
+    </mat-form-field>
+
+    <mat-form-field class="control" appearance="outline">
+      <mat-label>Reorder Level</mat-label>
+      <input matInput id="ReorderLevel" formControlName="ReorderLevel">
+    </mat-form-field>
+    <div class="break"></div>
+    <mat-checkbox id="Discontinued" formControlName="Discontinued">Discontinued</mat-checkbox>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-stroked-button (click)="addProduct()">Add product</button>
+    <button 
+      *ngIf="!isLoading" 
+      mat-flat-button 
+      color="primary"
+      (click)="onFormSubmit()" 
+      [disabled]="!(products.length > 0)"
+      >
+      Save all {{products.length}}
+    </button>
+    <mat-spinner *ngIf="isLoading" diameter="20"></mat-spinner>
+</mat-dialog-actions>

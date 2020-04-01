@@ -1,0 +1,11 @@
+<div class="task-view-container">
+    <div class="task-view-header">
+        <ng-container *ngTemplateOutlet="header; context: { item: item }"></ng-container>
+    </div>
+    <div class="task-view-main">
+        <ng-container *ngTemplateOutlet="main; context: { item: item }"></ng-container>
+    </div>
+    <div class="task-view-footer">
+        <ng-container *ngTemplateOutlet="footer; context: { item: item }"></ng-container>
+    </div>
+</div>

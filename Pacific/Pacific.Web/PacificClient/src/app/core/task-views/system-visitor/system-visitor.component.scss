@@ -1,0 +1,41 @@
+.full-width {
+    width: 100%;
+}
+
+.inline-form {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.inline-form-item {
+    flex: auto;
+    margin: 5px;
+}
+
+.scrollable-viewport {
+    height: 100%;
+    width: 100%;
+}
+
+.data-item {
+    height: 65px;
+}
+
+.scrollable-viewport {
+    height: 400px;
+}
+
+.divider {
+    margin: 5px 0px;
+}
+
+.form-element {
+    margin: 5px;
+}
+
+.centered {
+    display: flex;
+    justify-content: center;
+}

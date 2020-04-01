@@ -1,0 +1,34 @@
+<div class="table-container mat-elevation-z8">
+    <table mat-table matSort [dataSource]="dataSource">
+        <ng-container *ngFor="let col of displayedColumns">
+            <ng-container *ngIf="col !== 'selectDef'; else showCheckBox">
+                <ng-container [matColumnDef]="col">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ col }}</th>
+                    <td mat-cell *matCellDef="let element"> {{element[col]}} </td>
+                </ng-container>
+            </ng-container>
+        </ng-container>
+
+        <ng-template #showCheckBox>
+            <ng-container matColumnDef="selectDef">
+                <th mat-header-cell *matHeaderCellDef>
+                    <mat-checkbox (change)="$event ? masterToggle() : null"
+                                    [checked]="selectedRows.hasValue() && isAllSelected()"
+                                    [indeterminate]="selectedRows.hasValue() && !isAllSelected()">
+                    </mat-checkbox>
+                </th>
+                <td mat-cell *matCellDef="let row">
+                    <mat-checkbox (click)="$event.stopPropagation()"
+                                    (change)="$event ? selectedRows.toggle(row) : null"
+                                    [checked]="selectedRows.isSelected(row)">
+                    </mat-checkbox>
+                </td>
+            </ng-container>
+        </ng-template>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selectedRows.toggle(row)"></tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[10, 15, 20]" showFirstLastButtons></mat-paginator>
+</div>

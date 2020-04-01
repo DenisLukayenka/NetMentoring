@@ -1,0 +1,33 @@
+.inline-form {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 100%;
+}
+
+.inline-form-item {
+    flex: auto;
+    margin: 5px;
+}
+
+.mat-form-field + .mat-form-field {
+    margin-left: 8px;
+}
+
+.footer-container {
+    margin-top: 15px;
+}
+
+.divider {
+    margin: 10px 0px;
+}
+
+.fetch-button-wrapper {
+    margin: 0 10px;
+    display: flex;
+    align-items: center;
+}
+
+.form-element {
+    margin: 3px 5px;
+}

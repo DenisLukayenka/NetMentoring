@@ -1,0 +1,23 @@
+﻿@model FileSystemVisitor
+@using Pacific.Core.Services;
+
+<div>
+	<partial name="~/Views/Shared/_DirectorySelector.cshtml" />
+
+	@if(ViewBag.FolderPath != null && !ViewBag.FolderPath.IsNullOrEmpty())
+	{
+		<div class="btn-group" role="group" aria-label="ControlButtons">
+			<button type="button" class="btn btn-success">Start</button>
+			<button type="button" class="btn btn-warning">Next</button>
+			<button type="button" class="btn btn-danger">Stop</button>
+		</div>
+
+		<p><strong>Selected directory: @ViewBag.FolderPath;</strong></p>
+	}
+</div>
+
+
+@*foreach(var i in Model.Explore())
+	{
+		<p>@i.FullName.</p>
+	}*@

@@ -1,0 +1,25 @@
+import { Component } from "@angular/core";
+import { DataFetcher } from '../../utilities/DataFetcher';
+import { DataTableType } from '../../Models/DataTableType';
+import { CategoryViewModel } from '../../Models/CategoryViewModel';
+import { ListCategoryResponse } from '../../Models/Responses/ListCategoriesResponse';
+
+@Component({
+    selector: 'pac-choose-category-dialog',
+    styleUrls: ['./choose-category-dialog.component.scss'],
+    templateUrl: './choose-category-dialog.component.html'
+})
+export class ChooseCategoryDialog {
+    public categories: CategoryViewModel[];
+    public targetCategoryId: number;
+
+    constructor(private fetcher: DataFetcher) {
+        this.fetcher.fetchDataFromDb(DataTableType.Categories).subscribe((data: ListCategoryResponse) => {
+            this.categories = data.categories;
+
+            if(this.categories?.length > 0) {
+                this.targetCategoryId = this.categories[0].id;
+            }
+        });
+    }
+}
