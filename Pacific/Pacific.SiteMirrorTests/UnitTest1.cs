@@ -27,7 +27,34 @@ namespace Pacific.SiteMirrorTests
 		[Test]
 		public void Test2()
 		{
-			this._siteCopier.CopySiteAsync("http://www.bntu.by/", @"D:\Cash\MirrorTests", depth: 2).Wait();
+			this._siteCopier.CopySiteAsync("https://docs.microsoft.com/en-us/dotnet/api/system.web.httputility.urldecode?view=netframework-4.8", @"D:\Cash\MirrorTests\1", depth: 1).Wait();
+		}
+
+		[Test]
+		public void Test3()
+		{
+			this._siteCopier.CopySiteAsync(
+				"https://docs.microsoft.com/en-us/dotnet/api/system.web.httputility.urldecode?view=netframework-4.8", @"D:\Cash\MirrorTests\2"
+				, SiteMirror.Models.DomainRestriction.NoRestriction, 
+				1).Wait();
+		}
+
+		[Test]
+		public void Test4()
+		{
+			this._siteCopier.CopySiteAsync(
+				"https://docs.microsoft.com/en-us/dotnet/api/system.web.httputility.urldecode?view=netframework-4.8", @"D:\Cash\MirrorTests\3"
+				, SiteMirror.Models.DomainRestriction.NotHigherCurrentDomain,
+				1).Wait();
+		}
+
+		[Test]
+		public void Test5()
+		{
+			this._siteCopier.CopySiteAsync(
+				"https://docs.microsoft.com/en-us/", @"D:\Cash\MirrorTests\4"
+				, SiteMirror.Models.DomainRestriction.NotHigherCurrentDomain,
+				3).Wait();
 		}
 	}
 }

@@ -14,4 +14,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Pacific.ORM\Pacific.ORM.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Middlewares\" />
+  </ItemGroup>
 </Project>

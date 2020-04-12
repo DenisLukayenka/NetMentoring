@@ -5,6 +5,6 @@ namespace Pacific.SiteMirror.Services.HttpServices
 {
 	public  interface IHttpClientService
 	{
-		Task<byte[]> GetResourceDataAsync(Uri url, string host = null);
+		Task<byte[]> GetResourceDataAsync(Uri url);
 	}
 }
