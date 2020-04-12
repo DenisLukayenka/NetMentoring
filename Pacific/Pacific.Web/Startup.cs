@@ -15,6 +15,8 @@ using LinqToDB.Data;
 using Pacific.ORM;
 using AutoMapper;
 using Pacific.Web.Mappings;
+using Pacific.Core.Middlewares;
+using Pacific.Core.Services.Excel;
 
 namespace Pacific.Web
 {
@@ -46,6 +48,7 @@ namespace Pacific.Web
 																		.AllowAnyMethod()));
 
 			services.AddTransient<IHandlerAsync, GenericHandler>();
+			services.AddTransient<ExcelService>();
 			services.AddTransient<OrmService>();
 		}
 
@@ -67,14 +70,14 @@ namespace Pacific.Web
 			app.UseStaticFiles();
             app.UseSpaStaticFiles();
 
-			//app.UseRouting();
 			app.UseCors("AllowAll");
 
-			//app.UseAuthorization();
-			/*app.UseEndpoints(endpoints =>
-			{
-				endpoints.MapControllers();
-			});*/
+			app.MapWhen(
+				context => context.Request.Path.ToString().Contains("Report"),
+				appBranch =>
+				{
+					appBranch.UseOrderReportMiddleware();
+				});
 
 			app.UseMvc(routes =>
 			{

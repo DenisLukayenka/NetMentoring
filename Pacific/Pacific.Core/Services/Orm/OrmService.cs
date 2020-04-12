@@ -25,6 +25,14 @@ namespace Pacific.Core.Services.Orm
 			return products;
 		}
 
+		public async Task<IEnumerable<Order>> SelectOrders()
+		{
+			using (var db = new NothwindDbContext())
+			{
+				return await db.Orders.ToArrayAsync();
+			}
+		}
+
 		public async Task<IEnumerable<Employee>> SelectEmployeesAsync()
 		{
 			using (var db = new NothwindDbContext())
