@@ -16,7 +16,7 @@ namespace Pacific.Core.Factories.ReportOrder
 
 		public virtual IReportGenerator Create(string acceptHeader)
 		{
-			if(acceptHeader.Contains("text/xml") || acceptHeader.Contains("application/xml"))
+			if(acceptHeader != null && (acceptHeader.Contains("text/xml") || acceptHeader.Contains("application/xml")))
 			{
 				return this._resolver("xml");
 			}

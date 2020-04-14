@@ -85,4 +85,39 @@ export class DataFetcher {
 
         return this.http.post<StatusResponse>(ROOT_URL + '/request/ReplaceProduct', request, { headers });
     }
+
+    copySiteRequest(data: any): Observable<StatusResponse> {
+        const headers = new HttpHeaders().set('Accept', '*/*');
+
+        return this.http.post<StatusResponse>(ROOT_URL + '/request/CopySite', data, { headers });
+    }
+
+    orderReportPostRequest(data: any): Observable<StatusResponse> {
+        const headers = new HttpHeaders()
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+            .set('Accept', data.acceptHeader);
+
+        let body = new URLSearchParams();
+        body.set('customerId', data.customerId);
+        body.set('dateFrom', data.dateFrom);
+        body.set('dateTo', data.dateTo);
+        body.set('take', data.take);
+        body.set('skip', data.skip);
+
+        return this.http.post<StatusResponse>('https://localhost:44348/Report', body.toString(), { headers });
+    }
+
+    orderReportGetRequest(data: any): Observable<StatusResponse> {
+        const headers = new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8').set('Accept', data.acceptHeader);
+
+        const httpParams = new HttpParams()
+                                .set('customerId', data.customerId)
+                                .set('dateFrom', data.dateFrom)
+                                .set('dateTo', data.dateTo)
+                                .set('take', data.take)
+                                .set('skip', data.skip)
+                                ;
+
+        return this.http.get<StatusResponse>('https://localhost:44348/Report', { headers, params: httpParams });
+    }
 }

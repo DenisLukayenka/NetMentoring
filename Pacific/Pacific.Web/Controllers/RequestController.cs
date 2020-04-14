@@ -63,5 +63,11 @@ namespace Pacific.Web.Controllers
         {
             return await this._handler.Execute(request);
         }
+
+        [HttpPost("CopySite")]
+        public async Task<IResponse> Post([FromBody] CopySiteRequest request)
+        {
+            return await this._handler.Execute(request);
+        }
     }
 }

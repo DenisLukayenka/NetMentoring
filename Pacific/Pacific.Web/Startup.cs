@@ -13,6 +13,11 @@ using Pacific.Core.Services.Http;
 using System.Collections.Generic;
 using static Pacific.Core.ServiceResolvers.Resolvers;
 using Pacific.Core.Factories.ReportOrder;
+using Pacific.SiteMirror.Services;
+using Pacific.SiteMirror.Services.HttpServices;
+using Pacific.SiteMirror.Services.FileManager;
+using Pacific.SiteMirror.Services.PageSearcher;
+using AngleSharp.Html.Parser;
 
 namespace Pacific.Web
 {
@@ -44,6 +49,13 @@ namespace Pacific.Web
 																		.AllowAnyMethod()));
 
 			services.AddTransient<IHandlerAsync, GenericHandler>();
+
+			services.AddTransient<IHttpClientService, HttpClientService>();
+			services.AddTransient<IFileManager, FileManager>();
+			services.AddTransient<IPageSearcher, HtmlPageSearcher>();
+			services.AddTransient<IHttpClientService, HttpClientService>();
+			services.AddTransient<ISiteCopier, SiteCopier>();
+			services.AddTransient<IHtmlParser, HtmlParser>();
 
 			services.AddTransient<IReportGeneratorFactory, ReporGeneratorFactory>();
 			services.AddTransient<XlsxReportGenerator>();
@@ -83,12 +95,7 @@ namespace Pacific.Web
 
 			app.UseCors("AllowAll");
 
-			app.MapWhen(
-				context => context.Request.Path.ToString().Contains("Report"),
-				appBranch =>
-				{
-					appBranch.UseOrderReportMiddleware();
-				});
+			app.UseOrderReportMiddleware();
 
 			app.UseMvc(routes =>
 			{

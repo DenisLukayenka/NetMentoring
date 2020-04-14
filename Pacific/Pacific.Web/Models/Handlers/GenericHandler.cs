@@ -6,6 +6,7 @@ using AutoMapper;
 using Pacific.Core.Services;
 using Pacific.Core.Services.Orm;
 using Pacific.ORM.Models;
+using Pacific.SiteMirror.Services;
 using Pacific.Web.Models.Requests;
 using Pacific.Web.Models.Responses;
 using Pacific.Web.Models.TableModels;
@@ -17,11 +18,13 @@ namespace Pacific.Web.Models.Handlers
         private FileSystemVisitor _visitor;
         private readonly OrmService _ormService;
         private readonly IMapper _mapper;
+        private readonly ISiteCopier _siteCopier;
 
-        public GenericHandler(OrmService ormService, IMapper mapper)
+        public GenericHandler(OrmService ormService, IMapper mapper, ISiteCopier siteCopier)
         {
             this._ormService = ormService;
             this._mapper = mapper;
+            this._siteCopier = siteCopier;
         }
 
         public async Task<IResponse> Execute(IRequest request)
@@ -46,6 +49,8 @@ namespace Pacific.Web.Models.Handlers
                 case SimilarProductsRequest r:
                     return await this.Execute(r);
                 case ReplaceProductRequest r:
+                    return await this.Execute(r);
+                case CopySiteRequest r:
                     return await this.Execute(r);
             }
 
@@ -101,6 +106,17 @@ namespace Pacific.Web.Models.Handlers
             {
                 IsSuccess = await this._ormService
                     .ReplaceProductInOrder(request.OriginProductId, request.OriginOrderId, request.TargetProductId)
+            };
+        }
+
+        protected async Task<StatusResponse> Execute(CopySiteRequest request)
+        {
+            await this._siteCopier
+                    .CopySiteAsync(request.Link, request.TargetPath, request.DomainRestriction, request.Depth);
+
+            return new StatusResponse
+            {
+                IsSuccess = true
             };
         }
 

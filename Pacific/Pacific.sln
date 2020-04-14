@@ -25,9 +25,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Task", "Task\Task.csproj", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "HTTP", "HTTP", "{1DA4473C-2E7E-4212-A5C0-FF14F058F5AB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pacific.SiteMirror", "Pacific.SiteMirror\Pacific.SiteMirror.csproj", "{1A28538C-2B33-4FDF-A595-21F631602AAC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pacific.SiteMirror", "Pacific.SiteMirror\Pacific.SiteMirror.csproj", "{1A28538C-2B33-4FDF-A595-21F631602AAC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pacific.SiteMirrorTests", "Pacific.SiteMirrorTests\Pacific.SiteMirrorTests.csproj", "{CCFF8C41-B8FE-475C-B99A-7ACF546334C3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pacific.SiteMirrorTests", "Pacific.SiteMirrorTests\Pacific.SiteMirrorTests.csproj", "{CCFF8C41-B8FE-475C-B99A-7ACF546334C3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

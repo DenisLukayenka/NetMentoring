@@ -1,0 +1,79 @@
+<pac-task-view [header]="header" [main]="main" [footer]="footer">
+    <ng-template #header>
+    </ng-template>
+    <ng-template #main>
+        <h4>Task 1. Mirror site</h4>
+
+        <form #f="ngForm" (ngSubmit)="copySite(f)" class="simple-form">
+            <mat-form-field class="full-width">
+                <mat-label>Site url:</mat-label>
+                <input type="url" matInput ngModel name="Link" required placeholder="Url">
+            </mat-form-field>
+            <mat-form-field class="full-width">
+                <mat-label>Distanation path:</mat-label>
+                <input matInput ngModel name="TargetPath" required placeholder="Url">
+            </mat-form-field>
+
+            <mat-form-field class="form-element">
+                <mat-label>Depth level:</mat-label>
+                <input type="number" min="0" matInput ngModel name="Depth" required>
+            </mat-form-field>
+
+            <mat-form-field class="form-element">
+                <mat-label>Domain restriction:</mat-label>
+                <mat-select ngModel name="DomainRestriction" required>
+                    <mat-option *ngFor="let selector of DomainRestriction.values()" [value]="DomainRestriction[selector]">{{selector}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <button *ngIf="!isLoadingCopySite" type="button" class="btn btn-secondary" type="submit">Copy</button>
+            <mat-spinner *ngIf="isLoadingCopySite" diameter="30"></mat-spinner>
+        </form>
+
+        <h4>Task 2. Handle Report</h4>
+
+        <form #formHandle="ngForm" class="simple-form">
+            <mat-form-field class="full-width">
+                <mat-label>Customer id:</mat-label>
+                <input matInput ngModel name="customerId" placeholder="CustomerId">
+            </mat-form-field>
+            <mat-form-field class="form-element">
+                <mat-label>Date from:</mat-label>
+                <input matInput [matDatepicker]="dateFromPicker" ngModel name="dateFrom">
+                <mat-datepicker-toggle matSuffix [for]="dateFromPicker"></mat-datepicker-toggle>
+                <mat-datepicker #dateFromPicker></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field class="form-element">
+                <mat-label>Date to:</mat-label>
+                <input matInput [matDatepicker]="dateToPicker" ngModel name="dateTo">
+                <mat-datepicker-toggle matSuffix [for]="dateToPicker"></mat-datepicker-toggle>
+                <mat-datepicker #dateToPicker></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field class="form-element">
+                <mat-label>Take count:</mat-label>
+                <input type="number" min="0" matInput ngModel name="take">
+            </mat-form-field>
+
+            <mat-form-field class="form-element">
+                <mat-label>Skip count:</mat-label>
+                <input type="number" min="0" matInput ngModel name="skip">
+            </mat-form-field>
+
+            <mat-form-field class="full-width">
+                <mat-label>Accept Header:</mat-label>
+                <input matInput ngModel name="acceptHeader">
+            </mat-form-field>
+
+            <button *ngIf="!isLoadingOrdersReport" type="button" class="btn btn-secondary" (click)="onOrderReportPost(formHandle)">Report Post</button>
+            <button *ngIf="!isLoadingOrdersReport" type="button" class="btn btn-secondary" (click)="onOrderReportGet(formHandle)">Report Get</button>
+            <mat-spinner *ngIf="isLoadingOrdersReport" diameter="30"></mat-spinner>
+        </form>
+
+        <p class="error-message" *ngIf="isError">Error occurs!!!</p>
+    </ng-template>
+    <ng-template #footer>
+
+    </ng-template>
+</pac-task-view>
