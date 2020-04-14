@@ -3,9 +3,8 @@ using LinqToDB.Data;
 using Pacific.ORM;
 using Pacific.ORM.HelpModels;
 using Pacific.ORM.Models;
-using System.Collections;
+using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -25,11 +24,36 @@ namespace Pacific.Core.Services.Orm
 			return products;
 		}
 
-		public async Task<IEnumerable<Order>> SelectOrders()
+		public async Task<IEnumerable<Order>> SelectOrdersAsync(ReportOptions options)
 		{
 			using (var db = new NothwindDbContext())
 			{
-				return await db.Orders.ToArrayAsync();
+				var filteredOrders = db.Orders.Select(x => x);
+
+				if (!string.IsNullOrWhiteSpace(options.CustomerId))
+				{
+					filteredOrders = filteredOrders.Where(order => order.CustomerId == options.CustomerId);
+				}
+				if (options.DateFrom != null)
+				{
+					filteredOrders = filteredOrders.Where(order => order.OrderDate >= options.DateFrom.Value);
+				}
+				if (options.DateTo != null)
+				{
+					filteredOrders = filteredOrders.Where(order => order.OrderDate <= options.DateTo.Value);
+				}
+				if (options.Take != null)
+				{
+					filteredOrders = filteredOrders.Take(options.Take.Value);
+				}
+				if (options.Skip != null)
+				{
+					filteredOrders = filteredOrders.Skip(options.Skip.Value);
+				}
+
+				filteredOrders = filteredOrders.OrderBy(o => o.Id);
+
+				return await filteredOrders.ToArrayAsync();
 			}
 		}
 

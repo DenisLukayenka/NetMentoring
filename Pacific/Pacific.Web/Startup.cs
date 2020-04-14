@@ -2,21 +2,17 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Lib.Net.Http.WebPush;
-
-using Pacific.Core.Models.Subscriptions;
-using Pacific.Core.Producers;
-using Pacific.Core.Services.Subscriptions;
 using Pacific.Web.Models.Handlers;
 using Microsoft.Extensions.Hosting;
-using Pacific.Core.Services;
 using Pacific.Core.Services.Orm;
 using LinqToDB.Data;
 using Pacific.ORM;
 using AutoMapper;
-using Pacific.Web.Mappings;
 using Pacific.Core.Middlewares;
-using Pacific.Core.Services.Excel;
+using Pacific.Core.Services.Http;
+using System.Collections.Generic;
+using static Pacific.Core.ServiceResolvers.Resolvers;
+using Pacific.Core.Factories.ReportOrder;
 
 namespace Pacific.Web
 {
@@ -48,7 +44,22 @@ namespace Pacific.Web
 																		.AllowAnyMethod()));
 
 			services.AddTransient<IHandlerAsync, GenericHandler>();
-			services.AddTransient<ExcelService>();
+
+			services.AddTransient<IReportGeneratorFactory, ReporGeneratorFactory>();
+			services.AddTransient<XlsxReportGenerator>();
+			services.AddTransient<XmlReportGenerator>();
+			services.AddTransient<ReportGeneratorResolver>(provider => key =>
+			{
+				switch (key)
+				{
+					case "xml":
+						return provider.GetService<XmlReportGenerator>();
+					case "xlsx":
+						return provider.GetService<XlsxReportGenerator>();
+					default:
+						throw new KeyNotFoundException();
+				}
+			});
 			services.AddTransient<OrmService>();
 		}
 

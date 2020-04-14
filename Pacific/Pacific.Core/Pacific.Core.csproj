@@ -16,4 +16,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Pacific.ORM\Pacific.ORM.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\Http\" />
+  </ItemGroup>
 </Project>

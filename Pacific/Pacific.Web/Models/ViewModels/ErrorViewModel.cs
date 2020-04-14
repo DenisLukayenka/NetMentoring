@@ -1,5 +1,3 @@
-using System;
-
 namespace Pacific.Web.Models
 {
 	public class ErrorViewModel

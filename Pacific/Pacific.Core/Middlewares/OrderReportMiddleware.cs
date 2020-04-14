@@ -1,10 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Pacific.Core.Services.Excel;
-using Pacific.Core.Services.Orm;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using Pacific.Core.Factories.ReportOrder;
 using System.Threading.Tasks;
 
 namespace Pacific.Core.Middlewares
@@ -12,24 +8,41 @@ namespace Pacific.Core.Middlewares
 	public class OrderReportMiddleware
 	{
 		private readonly RequestDelegate _next;
-		private readonly ExcelService _excelService;
-		private readonly OrmService _ormService;
+		private readonly IReportGeneratorFactory _factory;
 
-		public OrderReportMiddleware(RequestDelegate next, ExcelService excelService, OrmService ormService)
+		public OrderReportMiddleware(RequestDelegate next, IReportGeneratorFactory factory)
 		{
 			this._next = next;
-			this._excelService = excelService;
-			this._ormService = ormService;
+			this._factory = factory;
 		}
 
 		public async Task Invoke(HttpContext context)
 		{
-			var bytes = await this._excelService.CreateExcelDocument(await this._ormService.SelectOrders());
+			if (ValidateRequest(context.Request))
+			{
+				var customerId = context.Request.Query["customerId"];
+				var dateFrom = context.Request.Query["dateFrom"];
+				var dateTo = context.Request.Query["dateTo"];
+				var take = context.Request.Query["take"];
+				var skip = context.Request.Query["skip"];
 
-			context.Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-			await context.Response.Body.WriteAsync(bytes, 0, bytes.Length);
+				var generator = this._factory.Create(context.Request.Headers["Accept"]);
+				var options = this._factory.BuildOptions(customerId, dateFrom, dateTo, take, skip);
 
-			//await this._next.Invoke(context);
+				var result = await generator.GenerateReportAsync(options);
+
+				/*context.Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";*/
+				await context.Response.Body.WriteAsync(result, 0, result.Length);
+			}
+			else
+			{
+				await this._next.Invoke(context);
+			}
+		}
+
+		protected virtual bool ValidateRequest(HttpRequest request)
+		{
+			return request.Path.Value.EndsWith("Report");
 		}
 	}
 

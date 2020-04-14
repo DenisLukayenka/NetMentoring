@@ -1,29 +1,29 @@
-﻿using DocumentFormat.OpenXml.Packaging;
-using Pacific.Core.Services.Orm;
-using Pacific.ORM.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using DocumentFormat.OpenXml;
+﻿using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
+using Pacific.Core.Services.Orm;
+using Pacific.ORM.HelpModels;
 using System.IO;
-using System.Threading.Tasks;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
-namespace Pacific.Core.Services.Excel
+namespace Pacific.Core.Services.Http
 {
-    public class ExcelService
-    {
-        private OrmService _ormService;
+	public class XlsxReportGenerator : IReportGenerator
+	{
+		private OrmService _ormService;
 
-        public ExcelService(OrmService ormService)
-        {
-            this._ormService = ormService;
-        }
+		public XlsxReportGenerator(OrmService ormService)
+		{
+			this._ormService = ormService;
+		}
 
-        public async Task<byte[]> CreateExcelDocument(IEnumerable<Order> orders)
-        {
+
+		public async Task<byte[]> GenerateReportAsync(ReportOptions options)
+		{
+            var orders = await this._ormService.SelectOrdersAsync(options);
+
             using (SpreadsheetDocument document = SpreadsheetDocument.Create("document.xlsx", SpreadsheetDocumentType.Workbook))
             {
                 WorkbookPart workbookPart = document.AddWorkbookPart();
@@ -58,7 +58,7 @@ namespace Pacific.Core.Services.Excel
 
                 var orderList = orders.ToList();
                 Row row;
-                for(int i = 0; i < orderList.Count; i++)
+                for (int i = 0; i < orderList.Count; i++)
                 {
                     row = new Row { RowIndex = (uint)(i + 1) };
                     InsertCell(row, 1, ReplaceHexadecimalSymbols(orderList[i].CustomerId), CellValues.String);
@@ -85,21 +85,21 @@ namespace Pacific.Core.Services.Excel
                 return memoryStream.ToArray();
             }
         }
-        static string ReplaceHexadecimalSymbols(string txt)
+        private string ReplaceHexadecimalSymbols(string txt)
         {
-            if(txt is null)
+            if (string.IsNullOrWhiteSpace(txt))
             {
                 return "";
             }
 
-            string r = "[\x00-\x08\x0B\x0C\x0E-\x1F\x26]";
-            return Regex.Replace(txt, r, "", RegexOptions.Compiled);
+            string regex = "[\x00-\x08\x0B\x0C\x0E-\x1F\x26]";
+            return Regex.Replace(txt, regex, "", RegexOptions.Compiled);
         }
 
-        public static void InsertCell(Row row, int cell_num, dynamic val, CellValues type)
+        private void InsertCell(Row row, int cellNum, dynamic val, CellValues type)
         {
             Cell refCell = null;
-            Cell newCell = new Cell() { CellReference = cell_num.ToString() + ":" + row.RowIndex.ToString() };
+            Cell newCell = new Cell() { CellReference = cellNum.ToString() + ":" + row.RowIndex.ToString() };
             row.InsertBefore(newCell, refCell);
 
             newCell.CellValue = new CellValue(val);
