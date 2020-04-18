@@ -15,7 +15,6 @@ namespace Pacific.Core.Producers
 	{
         private readonly IPushSubscriptionsService _pushSubscriptionsService;
         private readonly PushServiceClient _pushClient;
-        private bool isFileFound = false;
 
         public FileSystemVisitorNotificationProducer(IOptions<PushNotificationsOptions> options, IPushSubscriptionsService pushSubscriptionsService, PushServiceClient pushClient)
         {

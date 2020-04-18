@@ -3,9 +3,8 @@ using LinqToDB.Data;
 using Pacific.ORM;
 using Pacific.ORM.HelpModels;
 using Pacific.ORM.Models;
-using System.Collections;
+using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -23,6 +22,39 @@ namespace Pacific.Core.Services.Orm
 			}
 
 			return products;
+		}
+
+		public async Task<IEnumerable<Order>> SelectOrdersAsync(ReportOptions options)
+		{
+			using (var db = new NothwindDbContext())
+			{
+				var filteredOrders = db.Orders.Select(x => x);
+
+				if (!string.IsNullOrWhiteSpace(options.CustomerId))
+				{
+					filteredOrders = filteredOrders.Where(order => order.CustomerId == options.CustomerId);
+				}
+				if (options.DateFrom != null)
+				{
+					filteredOrders = filteredOrders.Where(order => order.OrderDate >= options.DateFrom.Value);
+				}
+				if (options.DateTo != null)
+				{
+					filteredOrders = filteredOrders.Where(order => order.OrderDate <= options.DateTo.Value);
+				}
+				if (options.Take != null)
+				{
+					filteredOrders = filteredOrders.Take(options.Take.Value);
+				}
+				if (options.Skip != null)
+				{
+					filteredOrders = filteredOrders.Skip(options.Skip.Value);
+				}
+
+				filteredOrders = filteredOrders.OrderBy(o => o.Id);
+
+				return await filteredOrders.ToArrayAsync();
+			}
 		}
 
 		public async Task<IEnumerable<Employee>> SelectEmployeesAsync()
@@ -93,14 +125,14 @@ namespace Pacific.Core.Services.Orm
 			}
 		}
 
-		public async Task<bool> MoveProductsToCategoryAsync(IEnumerable<int> productsIds, int targetCategoryId)
+		public Task<bool> MoveProductsToCategoryAsync(IEnumerable<int> productsIds, int targetCategoryId)
 		{
 			using (var db = new NothwindDbContext())
 			{
 				db.Products.Where(p => productsIds.Contains(p.Id)).Set(p => p.CategoryId, targetCategoryId).Update();
 			}
 
-			return true;
+			return Task.FromResult(true);
 		}
 
 		public async Task<bool> AddProductsAsync(IEnumerable<Product> products)
@@ -118,7 +150,7 @@ namespace Pacific.Core.Services.Orm
 						targetCategoryId = await db.Categories.Value(c => c.Name, product.Category.Name).InsertWithInt32IdentityAsync();
 					}
 
-					product.CategoryId = targetCategoryId ?? throw new System.Exception("Category id value is not presented");
+					product.CategoryId = targetCategoryId ?? throw new Exception("Category id value is not presented");
 
 					var targetSupplierId = dbSuppliers.FirstOrDefault(c => c.CompanyName == product.Supplier.CompanyName)?.Id;
 					if (targetSupplierId == null)
@@ -126,7 +158,7 @@ namespace Pacific.Core.Services.Orm
 						targetSupplierId = await db.Suppliers.Value(c => c.CompanyName, product.Supplier.CompanyName).InsertWithInt32IdentityAsync();
 					}
 
-					product.SupplierId = targetSupplierId ?? throw new System.Exception("Supplier id value is not presented");
+					product.SupplierId = targetSupplierId ?? throw new Exception("Supplier id value is not presented");
 				}
 
 				db.BulkCopy(products);

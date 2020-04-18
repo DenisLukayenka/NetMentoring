@@ -1,14 +1,11 @@
-using System.Collections.Generic;
 using System.Net.Mime;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using Pacific.ORM.Models;
 using Pacific.Web.Models;
 using Pacific.Web.Models.Handlers;
 using Pacific.Web.Models.Requests;
 using Pacific.Web.Models.Responses;
-using Pacific.Web.Models.TableModels;
 
 namespace Pacific.Web.Controllers
 {
@@ -63,6 +60,12 @@ namespace Pacific.Web.Controllers
 
         [HttpPost("ReplaceProduct")]
         public async Task<IResponse> Post([FromBody] ReplaceProductRequest request)
+        {
+            return await this._handler.Execute(request);
+        }
+
+        [HttpPost("CopySite")]
+        public async Task<IResponse> Post([FromBody] CopySiteRequest request)
         {
             return await this._handler.Execute(request);
         }

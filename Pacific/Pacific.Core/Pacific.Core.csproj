@@ -3,8 +3,10 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="DocumentFormat.OpenXml" Version="2.10.1" />
     <PackageReference Include="Lib.Net.Http.WebPush" Version="2.3.0" />
     <PackageReference Include="LiteDB" Version="5.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.2" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="3.1.2" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="3.1.2" />
@@ -13,5 +15,9 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Pacific.ORM\Pacific.ORM.csproj" />
+    <ProjectReference Include="..\Pacific.SiteMirror\Pacific.SiteMirror.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\Http\" />
   </ItemGroup>
 </Project>

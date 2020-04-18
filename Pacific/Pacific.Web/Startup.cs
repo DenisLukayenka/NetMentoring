@@ -2,19 +2,22 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Lib.Net.Http.WebPush;
-
-using Pacific.Core.Models.Subscriptions;
-using Pacific.Core.Producers;
-using Pacific.Core.Services.Subscriptions;
 using Pacific.Web.Models.Handlers;
 using Microsoft.Extensions.Hosting;
-using Pacific.Core.Services;
 using Pacific.Core.Services.Orm;
 using LinqToDB.Data;
 using Pacific.ORM;
 using AutoMapper;
-using Pacific.Web.Mappings;
+using Pacific.Core.Middlewares;
+using Pacific.Core.Services.Http;
+using System.Collections.Generic;
+using static Pacific.Core.ServiceResolvers.Resolvers;
+using Pacific.Core.Factories.ReportOrder;
+using Pacific.SiteMirror.Services;
+using Pacific.SiteMirror.Services.HttpServices;
+using Pacific.SiteMirror.Services.FileManager;
+using Pacific.SiteMirror.Services.PageSearcher;
+using AngleSharp.Html.Parser;
 
 namespace Pacific.Web
 {
@@ -46,6 +49,29 @@ namespace Pacific.Web
 																		.AllowAnyMethod()));
 
 			services.AddTransient<IHandlerAsync, GenericHandler>();
+
+			services.AddTransient<IHttpClientService, HttpClientService>();
+			services.AddTransient<IFileManager, FileManager>();
+			services.AddTransient<IPageSearcher, HtmlPageSearcher>();
+			services.AddTransient<IHttpClientService, HttpClientService>();
+			services.AddTransient<ISiteCopier, SiteCopier>();
+			services.AddTransient<IHtmlParser, HtmlParser>();
+
+			services.AddTransient<IReportGeneratorFactory, ReporGeneratorFactory>();
+			services.AddTransient<XlsxReportGenerator>();
+			services.AddTransient<XmlReportGenerator>();
+			services.AddTransient<ReportGeneratorResolver>(provider => key =>
+			{
+				switch (key)
+				{
+					case "xml":
+						return provider.GetService<XmlReportGenerator>();
+					case "xlsx":
+						return provider.GetService<XlsxReportGenerator>();
+					default:
+						throw new KeyNotFoundException();
+				}
+			});
 			services.AddTransient<OrmService>();
 		}
 
@@ -67,14 +93,9 @@ namespace Pacific.Web
 			app.UseStaticFiles();
             app.UseSpaStaticFiles();
 
-			//app.UseRouting();
 			app.UseCors("AllowAll");
 
-			//app.UseAuthorization();
-			/*app.UseEndpoints(endpoints =>
-			{
-				endpoints.MapControllers();
-			});*/
+			app.UseOrderReportMiddleware();
 
 			app.UseMvc(routes =>
 			{
