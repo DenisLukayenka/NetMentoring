@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Pacific.Core.EventSources;
 using Pacific.Core.Services;
 using Pacific.Core.Services.Orm;
 using Pacific.ORM.Models;
@@ -29,23 +31,20 @@ namespace Pacific.Web.Models.Handlers
 
         public async Task<IResponse> Execute(IRequest request)
         {
+            RequestEventSource.Instance.AddRequest();
+
             switch (request)
             {
                 case SystemVisitorRequest c:
                     return this.Execute(c);
-
                 case OrmRequest r:
-                    return await this.Execute(r);
-
+                    return await this.MetricExecuteWrapper(r);
                 case AddEmployeeRequest e:
                     return await this.Execute(e);
-
                 case ProductsMoveToCategoryRequest r:
                     return await this.Execute(r);
-
                 case AddProductsRequest r:
                     return await this.Execute(r);
-
                 case SimilarProductsRequest r:
                     return await this.Execute(r);
                 case ReplaceProductRequest r:
@@ -161,6 +160,21 @@ namespace Pacific.Web.Models.Handlers
             }
 
             throw new ArgumentException("Request type is incorrect");
+        }
+
+        private async Task<IResponse> MetricExecuteWrapper(OrmRequest request)
+        {
+            var sw = Stopwatch.StartNew();
+
+            try
+            {
+                return await this.Execute(request);
+            }
+            finally
+            {
+                RequestEventSource.Instance.AddRequestToDb(sw.ElapsedMilliseconds);
+                sw.Stop();
+            }
         }
     }
 }
