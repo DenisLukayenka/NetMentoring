@@ -9,6 +9,7 @@ using Pacific.Core.Services;
 using Pacific.Core.Services.Orm;
 using Pacific.ORM.Models;
 using Pacific.SiteMirror.Services;
+using Pacific.Web.Models.Logger;
 using Pacific.Web.Models.Requests;
 using Pacific.Web.Models.Responses;
 using Pacific.Web.Models.TableModels;
@@ -21,11 +22,13 @@ namespace Pacific.Web.Models.Handlers
         private readonly OrmService _ormService;
         private readonly IMapper _mapper;
         private readonly ISiteCopier _siteCopier;
+        private readonly ILoggerManager _logger;
 
-        public GenericHandler(OrmService ormService, IMapper mapper, ISiteCopier siteCopier)
+        public GenericHandler(OrmService ormService, IMapper mapper, ISiteCopier siteCopier, ILoggerManager logger)
         {
             this._ormService = ormService;
             this._mapper = mapper;
+            this._logger = logger;
             this._siteCopier = siteCopier;
         }
 
@@ -53,7 +56,9 @@ namespace Pacific.Web.Models.Handlers
                     return await this.Execute(r);
             }
 
-            throw new ArgumentException("Request type is incorrect");
+            var ex = new ArgumentException("Request type is incorrect");
+            this._logger.Error(ex, $"Request with type ${request.GetType()} can't be handled!");
+            throw ex;
         }
 
         protected SystemVisitorResponse Execute(SystemVisitorRequest request)
@@ -159,7 +164,9 @@ namespace Pacific.Web.Models.Handlers
                     };
             }
 
-            throw new ArgumentException("Request type is incorrect");
+            var ex = new ArgumentException("Request type is incorrect");
+            this._logger.Error(ex, $"Not found orm selector ${request.requestType}.");
+            throw ex;
         }
 
         private async Task<IResponse> MetricExecuteWrapper(OrmRequest request)
