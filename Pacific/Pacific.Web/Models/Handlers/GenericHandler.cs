@@ -1,12 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Pacific.Core.EventSources;
 using Pacific.Core.Services;
 using Pacific.Core.Services.Orm;
 using Pacific.ORM.Models;
 using Pacific.SiteMirror.Services;
+using Pacific.Web.Models.Logger;
 using Pacific.Web.Models.Requests;
 using Pacific.Web.Models.Responses;
 using Pacific.Web.Models.TableModels;
@@ -19,33 +22,32 @@ namespace Pacific.Web.Models.Handlers
         private readonly OrmService _ormService;
         private readonly IMapper _mapper;
         private readonly ISiteCopier _siteCopier;
+        private readonly ILoggerManager _logger;
 
-        public GenericHandler(OrmService ormService, IMapper mapper, ISiteCopier siteCopier)
+        public GenericHandler(OrmService ormService, IMapper mapper, ISiteCopier siteCopier, ILoggerManager logger)
         {
             this._ormService = ormService;
             this._mapper = mapper;
+            this._logger = logger;
             this._siteCopier = siteCopier;
         }
 
         public async Task<IResponse> Execute(IRequest request)
         {
+            RequestEventSource.Instance.AddRequest();
+
             switch (request)
             {
                 case SystemVisitorRequest c:
                     return this.Execute(c);
-
                 case OrmRequest r:
-                    return await this.Execute(r);
-
+                    return await this.MetricExecuteWrapper(r);
                 case AddEmployeeRequest e:
                     return await this.Execute(e);
-
                 case ProductsMoveToCategoryRequest r:
                     return await this.Execute(r);
-
                 case AddProductsRequest r:
                     return await this.Execute(r);
-
                 case SimilarProductsRequest r:
                     return await this.Execute(r);
                 case ReplaceProductRequest r:
@@ -54,7 +56,9 @@ namespace Pacific.Web.Models.Handlers
                     return await this.Execute(r);
             }
 
-            throw new ArgumentException("Request type is incorrect");
+            var ex = new ArgumentException("Request type is incorrect");
+            this._logger.Error(ex, $"Request with type ${request.GetType()} can't be handled!");
+            throw ex;
         }
 
         protected SystemVisitorResponse Execute(SystemVisitorRequest request)
@@ -160,7 +164,24 @@ namespace Pacific.Web.Models.Handlers
                     };
             }
 
-            throw new ArgumentException("Request type is incorrect");
+            var ex = new ArgumentException("Request type is incorrect");
+            this._logger.Error(ex, $"Not found orm selector ${request.requestType}.");
+            throw ex;
+        }
+
+        private async Task<IResponse> MetricExecuteWrapper(OrmRequest request)
+        {
+            var sw = Stopwatch.StartNew();
+
+            try
+            {
+                return await this.Execute(request);
+            }
+            finally
+            {
+                RequestEventSource.Instance.AddRequestToDb(sw.ElapsedMilliseconds);
+                sw.Stop();
+            }
         }
     }
 }

@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Pacific.Core.EventSources;
 using Pacific.Core.Factories.ReportOrder;
 using Pacific.ORM.HelpModels;
-using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace Pacific.Core.Middlewares
@@ -22,33 +23,22 @@ namespace Pacific.Core.Middlewares
 		{
 			if (ValidateRequest(context.Request))
 			{
-				var generator = this._factory.Create(context.Request.Headers["Accept"]);
-				ReportOptions options;
+				var sw = Stopwatch.StartNew();
 
-				if(context.Request.ContentType == "application/x-www-form-urlencoded")
+				try
 				{
-					options = this._factory.BuildOptions(
-						context.Request.Form["customerId"],
-						context.Request.Form["dateFrom"],
-						context.Request.Form["dateTo"],
-						context.Request.Form["take"],
-						context.Request.Form["skip"]);
+					var generator = this._factory.Create(context.Request.Headers["Accept"]);
+					var options = this.GetReportOptions(context);
+
+					var result = await generator.GenerateReportAsync(options);
+
+					this.UpdateResponseContentType(options, context);
+					await context.Response.Body.WriteAsync(result, 0, result.Length);
 				}
-				else
+				finally
 				{
-					var customerId = context.Request.Query["customerId"];
-					var dateFrom = context.Request.Query["dateFrom"];
-					var dateTo = context.Request.Query["dateTo"];
-					var take = context.Request.Query["take"];
-					var skip = context.Request.Query["skip"];
-
-					options = this._factory.BuildOptions(customerId, dateFrom, dateTo, take, skip);
+					RequestEventSource.Instance.AddReportGenerationDuration(sw.ElapsedMilliseconds);
 				}
-
-				var result = await generator.GenerateReportAsync(options);
-
-				this.UpdateResponseContentType(options, context);
-				await context.Response.Body.WriteAsync(result, 0, result.Length);
 			}
 			else
 			{
@@ -75,6 +65,33 @@ namespace Pacific.Core.Middlewares
 				context.Response.Headers.Add("Content-Transfer-Encoding", "binary");
 				context.Response.Headers.Add("Content-disposition", "attachment; filename=Report.xlsx");
 			}
+		}
+
+		private ReportOptions GetReportOptions(HttpContext context)
+		{
+			ReportOptions options;
+
+			if (context.Request.ContentType == "application/x-www-form-urlencoded")
+			{
+				options = this._factory.BuildOptions(
+					context.Request.Form["customerId"],
+					context.Request.Form["dateFrom"],
+					context.Request.Form["dateTo"],
+					context.Request.Form["take"],
+					context.Request.Form["skip"]);
+			}
+			else
+			{
+				var customerId = context.Request.Query["customerId"];
+				var dateFrom = context.Request.Query["dateFrom"];
+				var dateTo = context.Request.Query["dateTo"];
+				var take = context.Request.Query["take"];
+				var skip = context.Request.Query["skip"];
+
+				options = this._factory.BuildOptions(customerId, dateFrom, dateTo, take, skip);
+			}
+
+			return options;
 		}
 	}
 

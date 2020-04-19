@@ -18,6 +18,8 @@ using Pacific.SiteMirror.Services.HttpServices;
 using Pacific.SiteMirror.Services.FileManager;
 using Pacific.SiteMirror.Services.PageSearcher;
 using AngleSharp.Html.Parser;
+using NLog;
+using Pacific.Web.Models.Logger;
 
 namespace Pacific.Web
 {
@@ -25,6 +27,7 @@ namespace Pacific.Web
 	{
 		public Startup(IConfiguration configuration)
 		{
+			LogManager.LoadConfiguration("nlog.config");
 			Configuration = configuration;
 		}
 
@@ -73,6 +76,8 @@ namespace Pacific.Web
 				}
 			});
 			services.AddTransient<OrmService>();
+
+			services.AddSingleton<ILoggerManager, NLoggerManager>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -92,7 +97,6 @@ namespace Pacific.Web
 			app.UseHttpsRedirection();
 			app.UseStaticFiles();
             app.UseSpaStaticFiles();
-
 			app.UseCors("AllowAll");
 
 			app.UseOrderReportMiddleware();
