@@ -110,5 +110,19 @@
     <Build Include="dbo\Stored Procedures\1_3_2_SelectCustomersByCountry.sql" />
     <Build Include="dbo\Stored Procedures\1_3_3_SelectCustomersByCountryWithoutBetween.sql" />
     <Build Include="dbo\Stored Procedures\1_4_1_SelectProducts.sql" />
+    <Build Include="dbo\Stored Procedures\2_1_1_OrderDetailsTotal.sql" />
+    <Build Include="dbo\Stored Procedures\2_1_2_SelectOrdersNotShipped.sql" />
+    <Build Include="dbo\Stored Procedures\2_1_3_SelectOrdersUniqueCustomers.sql" />
+    <Build Include="dbo\Stored Procedures\2_2_1_SelectOrdersGroupDate.sql" />
+    <Build Include="dbo\Stored Procedures\2_2_2_SelectOrdersByCustomers.sql" />
+    <Build Include="dbo\Stored Procedures\2_2_3_SelectOrdersByCustomersSpec.sql" />
+    <Build Include="dbo\Stored Procedures\2_2_4_SelectEmployeesCustomersByCity.sql" />
+    <Build Include="dbo\Stored Procedures\2_2_5_SelectCustomersByCity.sql" />
+    <Build Include="dbo\Stored Procedures\2_2_6_SelectEmployeesWithBoss.sql" />
+    <Build Include="dbo\Stored Procedures\2_3_1_SelectEmployeesByRegion.sql" />
+    <Build Include="dbo\Stored Procedures\2_3_2_SelectCustomers.sql" />
+    <Build Include="dbo\Stored Procedures\2_4_1_SelectSuppliers.sql" />
+    <Build Include="dbo\Stored Procedures\2_4_2_SelectEmployeesByOrdersCount.sql" />
+    <Build Include="dbo\Stored Procedures\2_4_3_SelectCustomers.sql" />
   </ItemGroup>
 </Project>
