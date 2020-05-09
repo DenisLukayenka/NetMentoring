@@ -16,8 +16,8 @@ namespace Pacific.Web.Controllers
     [Produces(MediaTypeNames.Application.Json)]
     public class RequestController
     {
-        private IHandlerAsync _handler;
-        private ILoggerManager _logger;
+        private readonly IHandlerAsync _handler;
+        private readonly ILoggerManager _logger;
 
         public RequestController(IHandlerAsync handler, ILoggerManager logger)
         {
