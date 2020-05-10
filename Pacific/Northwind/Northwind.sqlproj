@@ -61,6 +61,7 @@
     <Folder Include="dbo\Views\" />
     <Folder Include="dbo\Stored Procedures\" />
     <Folder Include="Scripts\" />
+    <Folder Include="Scripts\Post-Deployment" />
     <Folder Include="Scripts\UpdateDbScripts" />
   </ItemGroup>
   <ItemGroup>
