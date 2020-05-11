@@ -1,11 +1,13 @@
-namespace Task.DB
+namespace TaskSerialization.DB
 {
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
+    using System.Data.Entity.Infrastructure;
+    using System.Runtime.Serialization;
 
+    [Serializable]
     public partial class Category
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -28,5 +30,20 @@ namespace Task.DB
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Product> Products { get; set; }
+
+        [OnDeserializing]
+        public void OnDeserializing(StreamingContext context)
+        {
+            this.Products = new List<Product>();
+        }
+
+        [OnSerializing]
+        public void OnSerializing(StreamingContext context)
+        {
+            if(context.Context is IObjectContextAdapter contextAdapter)
+            {
+                contextAdapter.ObjectContext.LoadProperty(this, c => c.Products);
+            }
+        }
     }
 }

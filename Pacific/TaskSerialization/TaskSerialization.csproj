@@ -64,6 +64,10 @@
     <Compile Include="DB\Shipper.cs" />
     <Compile Include="DB\Supplier.cs" />
     <Compile Include="DB\Territory.cs" />
+    <Compile Include="Helpers\DbValueExtensions.cs" />
+    <Compile Include="Helpers\OrderDataContractSurrogate.cs" />
+    <Compile Include="Helpers\OrderDetailSurrogate.cs" />
+    <Compile Include="Helpers\OrderDetailSurrogateSelector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

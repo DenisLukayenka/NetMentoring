@@ -1,4 +1,4 @@
-namespace Task.DB
+namespace TaskSerialization.DB
 {
     using System;
     using System.Collections.Generic;
